@@ -1,4 +1,5 @@
 import { i as __require, t as __commonJSMin } from "../_runtime.mjs";
+import processModule from "node:process";
 //#region node_modules/dotenv/dist/index.cjs
 var require_dist = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	var j = (e, n) => () => {
@@ -18,7 +19,7 @@ var require_dist = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				""
 			].includes(e.toLowerCase()) : !!e;
 		}
-		function U(e = process.env) {
+		function U(e = processModule.env) {
 			let n = {};
 			for (let t of [
 				"ENCODING",
@@ -39,7 +40,7 @@ var require_dist = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		};
 	});
 	var m = j((ee, b) => {
-		var F = __require("fs"), _ = __require("path"), B = __require("os"), { URL: L, fileURLToPath: Q } = __require("url"), { parseBoolean: $, optionsFromEnv: I } = R(), G = /(?:^|^)\s*(?:export\s+)?([\w.-]+)(?:\s*=\s*?|:\s+?)(\s*'(?:\\'|[^'])*'|\s*"(?:\\"|[^"])*"|\s*`(?:\\`|[^`])*`|[^#\r\n]+)?\s*(?:#.*)?(?:$|$)/gm, y = /* @__PURE__ */ new Uint8Array(256);
+		var F = __require("node:fs"), _ = __require("node:path"), B = __require("node:os"), { URL: L, fileURLToPath: Q } = __require("node:url"), { parseBoolean: $, optionsFromEnv: I } = R(), G = /(?:^|^)\s*(?:export\s+)?([\w.-]+)(?:\s*=\s*?|:\s+?)(\s*'(?:\\'|[^'])*'|\s*"(?:\\"|[^"])*"|\s*`(?:\\`|[^`])*`|[^#\r\n]+)?\s*(?:#.*)?(?:$|$)/gm, y = /* @__PURE__ */ new Uint8Array(256);
 		for (let e = 48; e <= 57; e++) y[e] = 1;
 		for (let e = 65; e <= 90; e++) y[e] = 1;
 		for (let e = 97; e <= 122; e++) y[e] = 1;
@@ -157,7 +158,7 @@ var require_dist = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		}
 		function M(e) {
 			e = K(e);
-			let n = _.resolve(process.cwd(), ".env"), t = "utf8", r = process.env;
+			let n = _.resolve(processModule.cwd(), ".env"), t = "utf8", r = processModule.env;
 			e && e.processEnv != null && (r = e.processEnv);
 			let o = $(e && e.debug);
 			e && e.encoding ? t = e.encoding : o && v("no encoding is specified (UTF-8 is used by default)");
@@ -178,7 +179,7 @@ var require_dist = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			if (o || !D) {
 				let d = Object.keys(k).length, l = [];
 				for (let C of i) try {
-					let a = _.relative(process.cwd(), C instanceof L ? Q(C) : C);
+					let a = _.relative(processModule.cwd(), C instanceof L ? Q(C) : C);
 					l.push(a);
 				} catch (a) {
 					o && v(`failed to load ${C} ${a.message}`), c = a;

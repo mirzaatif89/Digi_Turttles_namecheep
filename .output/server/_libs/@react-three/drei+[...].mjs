@@ -1,9 +1,10 @@
 import { o as __toESM, t as __commonJSMin } from "../../_runtime.mjs";
-import { u as require_react } from "../@floating-ui/react-dom+[...].mjs";
+import { $ as performance_default, D as LinearSRGBColorSpace, E as LinearFilter, F as PerspectiveCamera, G as Spherical, H as Scene, L as RGBAFormat, O as MathUtils, P as OrthographicCamera, Q as init_performance, R as Raycaster, S as IcosahedronGeometry, T as Layers, U as ShaderMaterial, V as SRGBColorSpace, X as Vector3, Y as Vector2, Z as Vector4, _ as DataTextureLoader, a as WebGLRenderer, f as Clock, g as CubeTextureLoader, i as WebGLCubeRenderTarget, k as Mesh, m as ColorManagement, n as HDRJPGLoader, o as three_module_exports, p as Color, t as GainMapLoader, v as DataUtils, x as HalfFloatType, y as FloatType, z as RedFormat } from "../@monogrid/gainmap-js+[...].mjs";
 import { L as require_jsx_runtime } from "../@radix-ui/react-alert-dialog+[...].mjs";
+import { u as require_react } from "../@floating-ui/react-dom+[...].mjs";
 import { t as _extends } from "../babel__runtime.mjs";
-import { D as LinearSRGBColorSpace, E as LinearFilter, F as PerspectiveCamera, G as Spherical, H as Scene, L as RGBAFormat, O as MathUtils, P as OrthographicCamera, R as Raycaster, S as IcosahedronGeometry, T as Layers, U as ShaderMaterial, V as SRGBColorSpace, X as Vector3, Y as Vector2, Z as Vector4, _ as DataTextureLoader, a as WebGLRenderer, f as Clock, g as CubeTextureLoader, i as WebGLCubeRenderTarget, k as Mesh, m as ColorManagement, n as HDRJPGLoader, o as three_module_exports, p as Color, t as GainMapLoader, v as DataUtils, x as HalfFloatType, y as FloatType, z as RedFormat } from "../monogrid__gainmap-js+three.mjs";
-import { createRequire } from "module";
+import processModule from "node:process";
+import { setImmediate } from "node:timers";
 //#region node_modules/scheduler/cjs/scheduler.production.js
 /**
 * @license React
@@ -15,6 +16,7 @@ import { createRequire } from "module";
 * LICENSE file in the root directory of this source tree.
 */
 var require_scheduler_production = /* @__PURE__ */ __commonJSMin(((exports) => {
+	init_performance();
 	function push(heap, node) {
 		var index = heap.length;
 		heap.push(node);
@@ -46,8 +48,8 @@ var require_scheduler_production = /* @__PURE__ */ __commonJSMin(((exports) => {
 		return 0 !== diff ? diff : a.id - b.id;
 	}
 	exports.unstable_now = void 0;
-	if ("object" === typeof performance && "function" === typeof performance.now) {
-		var localPerformance = performance;
+	if ("object" === typeof performance_default && "function" === typeof performance_default.now) {
+		var localPerformance = performance_default;
 		exports.unstable_now = function() {
 			return localPerformance.now();
 		};
@@ -406,8 +408,8 @@ var require_with_selector = /* @__PURE__ */ __commonJSMin(((exports, module) => 
 }));
 //#endregion
 //#region node_modules/zustand/esm/vanilla.mjs
-var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 var import_jsx_runtime = require_jsx_runtime();
+var import_react = /* @__PURE__ */ __toESM(require_react(), 1);
 var import_with_selector = /* @__PURE__ */ __toESM(require_with_selector(), 1);
 var createStoreImpl = (createState) => {
 	let state;
@@ -6719,8 +6721,8 @@ Error generating stack: ` + l.message + `
 						error: t
 					});
 					if (!window.dispatchEvent(r)) return;
-				} else if (typeof process == "object" && typeof process.emit == "function") {
-					process.emit("uncaughtException", t);
+				} else if (typeof processModule == "object" && typeof processModule.emit == "function") {
+					processModule.emit("uncaughtException", t);
 					return;
 				}
 				console.error(t);
@@ -8341,11 +8343,7 @@ function Canvas(props) {
 //#region node_modules/three-stdlib/_polyfill/constants.js
 var version$1 = /* @__PURE__ */ (() => parseInt("187".replace(/\D+/g, "")))();
 //#endregion
-//#region node_modules/three-stdlib/node_modules/fflate/esm/index.mjs
-var require$1 = createRequire("/");
-try {
-	require$1("worker_threads").Worker;
-} catch (e) {}
+//#region node_modules/three-stdlib/node_modules/fflate/esm/browser.js
 var u8 = Uint8Array;
 var u16 = Uint16Array;
 var u32 = Uint32Array;

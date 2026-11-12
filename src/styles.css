@@ -350,6 +350,198 @@ html[data-admin-theme="light"] .admin-mobile-sheet {
   color: var(--admin-text);
 }
 
+/* Dashboard-only surfaces deliberately avoid the public site's glass blur. */
+.admin-dashboard {
+  animation: admin-dashboard-enter 180ms ease-out both;
+}
+
+.admin-dashboard-hero,
+.admin-dashboard-panel,
+.admin-dashboard-stat,
+.admin-dashboard-skeleton {
+  border: 1px solid var(--admin-border);
+  border-radius: 1rem;
+  background: var(--admin-surface);
+  box-shadow: 0 16px 36px -28px oklch(0.06 0.03 240 / 0.72);
+}
+
+.admin-dashboard-hero {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background:
+    linear-gradient(
+      115deg,
+      color-mix(in oklab, var(--admin-teal) 12%, transparent),
+      transparent 42%
+    ),
+    var(--admin-surface);
+}
+
+.admin-dashboard-panel {
+  padding: 1.5rem;
+}
+
+.admin-dashboard-stat {
+  display: block;
+  min-height: 10.5rem;
+  padding: 1.25rem;
+  outline: none;
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    opacity 160ms ease;
+}
+
+.admin-dashboard-stat:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in oklab, var(--admin-teal) 60%, var(--admin-border));
+}
+
+.admin-dashboard-stat:focus-visible,
+.admin-dashboard-health-item:focus-visible,
+.admin-dashboard-action:focus-visible,
+.admin-dashboard-text-link:focus-visible,
+.admin-dashboard-panel a:focus-visible {
+  outline: 2px solid var(--admin-teal);
+  outline-offset: 3px;
+}
+
+.admin-dashboard-icon {
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  place-items: center;
+  border-radius: 0.75rem;
+  color: var(--admin-teal);
+  background: color-mix(in oklab, var(--admin-teal) 14%, transparent);
+}
+
+.admin-dashboard-health-item {
+  display: block;
+  min-height: 9rem;
+  padding: 1rem;
+  border: 1px solid var(--admin-border);
+  border-radius: 0.875rem;
+  outline: none;
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease;
+}
+
+.admin-dashboard-health-item:hover {
+  transform: translateY(-1px);
+  border-color: color-mix(in oklab, var(--admin-teal) 55%, var(--admin-border));
+}
+
+.admin-dashboard-meter {
+  height: 0.38rem;
+  overflow: hidden;
+  margin-top: 0.5rem;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--admin-teal) 13%, transparent);
+}
+
+.admin-dashboard-meter > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--admin-teal);
+}
+
+.admin-dashboard-action {
+  display: flex;
+  min-height: 4.5rem;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: center;
+  padding: 0.8rem;
+  border: 1px solid var(--admin-border);
+  border-radius: 0.75rem;
+  color: var(--admin-text);
+  font-size: 0.78rem;
+  font-weight: 700;
+  outline: none;
+  transition:
+    transform 160ms ease,
+    background-color 160ms ease;
+}
+
+.admin-dashboard-action:hover {
+  transform: translateY(-1px);
+  background: color-mix(in oklab, var(--admin-teal) 9%, transparent);
+}
+
+.admin-dashboard-status-ok,
+.admin-dashboard-status-muted {
+  border-radius: 999px;
+  padding: 0.2rem 0.55rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.admin-dashboard-status-ok {
+  color: var(--admin-teal);
+  background: color-mix(in oklab, var(--admin-teal) 14%, transparent);
+}
+
+.admin-dashboard-status-muted {
+  color: var(--admin-muted);
+  background: color-mix(in oklab, var(--admin-muted) 12%, transparent);
+}
+
+.admin-dashboard-text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: var(--admin-teal);
+  font-size: 0.8rem;
+  font-weight: 700;
+  outline: none;
+}
+
+.admin-dashboard-empty {
+  display: flex;
+  min-height: 10rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 1px dashed var(--admin-border);
+  border-radius: 0.875rem;
+  padding: 1rem;
+  color: var(--admin-muted);
+  text-align: center;
+  font-size: 0.875rem;
+}
+
+.admin-dashboard-skeleton {
+  background: linear-gradient(
+    100deg,
+    var(--admin-skeleton) 10%,
+    color-mix(in oklab, var(--admin-skeleton) 70%, var(--admin-surface-raised)) 45%,
+    var(--admin-skeleton) 80%
+  );
+  background-size: 200% 100%;
+  animation: admin-dashboard-shimmer 1.4s ease-in-out infinite;
+}
+
+@keyframes admin-dashboard-enter {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes admin-dashboard-shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
+
 .admin-eyebrow {
   color: var(--admin-teal);
   font-size: 0.68rem;
@@ -657,6 +849,9 @@ html[data-admin-theme="light"] .admin-mobile-sheet {
 }
 
 @media (max-width: 639px) {
+  .admin-dashboard-hero {
+    flex-direction: column;
+  }
   .admin-command-trigger {
     width: 2.25rem;
     justify-content: center;
@@ -664,5 +859,16 @@ html[data-admin-theme="light"] .admin-mobile-sheet {
   }
   .admin-view-site {
     display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .admin-dashboard,
+  .admin-dashboard-skeleton,
+  .admin-dashboard-stat,
+  .admin-dashboard-health-item,
+  .admin-dashboard-action {
+    animation: none;
+    transition: none;
   }
 }

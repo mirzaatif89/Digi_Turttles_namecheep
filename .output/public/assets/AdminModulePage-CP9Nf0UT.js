@@ -1,0 +1,1 @@
+import{t as e}from"./jsx-runtime-CXCudH8Z.js";import{n as t,t as n}from"./PageHeader-BFGTvwZ1.js";import{A as r}from"./index-BTZU8BAZ.js";var i=e();function a({title:e,allowed:a}){return a?(0,i.jsxs)(i.Fragment,{children:[(0,i.jsx)(n,{title:e,description:`Module workspace`}),(0,i.jsx)(t,{title:e})]}):(0,i.jsx)(r,{})}export{a as t};

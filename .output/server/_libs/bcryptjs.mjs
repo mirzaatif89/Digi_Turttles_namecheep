@@ -1,5 +1,6 @@
 import { r as __exportAll } from "../_runtime.mjs";
-import nodeCrypto from "crypto";
+import { setImmediate } from "node:timers";
+import nodeCrypto from "node:crypto";
 //#region node_modules/bcryptjs/index.js
 var bcryptjs_exports = /* @__PURE__ */ __exportAll({
 	compare: () => compare,

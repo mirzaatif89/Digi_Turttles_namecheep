@@ -1,1 +1,0 @@
-import{n as e}from"./with-selector-B0MYrySg.js";import{t}from"./AdminModulePage-BgvLLESt.js";import{t as n}from"./admin-navigation-D19npLh_.js";var r=e();function i({module:e,allowed:i}){return(0,r.jsx)(t,{title:n(e),allowed:i})}export{i as t};

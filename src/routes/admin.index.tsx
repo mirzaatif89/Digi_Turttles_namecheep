@@ -1,13 +1,13 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Dashboard, DashboardSkeleton } from "@/components/admin/Dashboard";
-import { routeAdminDashboard } from "@/lib/admin.route";
+import { routeAdminModule } from "@/lib/admin.route";
 
 export const Route = createFileRoute("/admin/")({
-  loader: () => routeAdminDashboard(),
+  loader: () => routeAdminModule("dashboard"),
   pendingComponent: DashboardSkeleton,
   component: AdminDashboard,
 });
 
 function AdminDashboard() {
-  return <Dashboard data={Route.useLoaderData()} />;
+  return <Dashboard access={Route.useLoaderData()} />;
 }

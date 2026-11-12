@@ -1,1 +1,0 @@
-import{n as e}from"./with-selector-B0MYrySg.js";import{T as t}from"./index-gBwqNe2L.js";import{t as n}from"./RoutedModulePage-B_7EyCyl.js";var r=e();function i(){return(0,r.jsx)(n,{module:`about`,allowed:t.useLoaderData().allowed})}export{i as component};

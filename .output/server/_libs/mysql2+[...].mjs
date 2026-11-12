@@ -4,6 +4,9 @@ import { t as require_umd } from "./long.mjs";
 import { t as require_lib$2 } from "./iconv-lite+safer-buffer.mjs";
 import { t as require_generate_function } from "./generate-function+is-property.mjs";
 import { t as require_lib$3 } from "./aws-ssl-profiles.mjs";
+import processModule from "node:process";
+import { Buffer } from "node:buffer";
+import { setImmediate } from "node:timers";
 //#region node_modules/sql-escaper/lib/index.js
 var require_lib = /* @__PURE__ */ __commonJSMin(((exports) => {
 	/**
@@ -12,7 +15,7 @@ var require_lib = /* @__PURE__ */ __commonJSMin(((exports) => {
 	*/
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.raw = exports.format = exports.escape = exports.arrayToList = exports.bufferToString = exports.objectToValues = exports.escapeId = exports.temporalToString = exports.dateToString = void 0;
-	var buffer_1 = __require("buffer");
+	var buffer_1 = __require("node:buffer");
 	var CONTEXT_TRIGGER = /* @__PURE__ */ new Uint8Array(128);
 	var SET_CLAUSE_TERMINATORS_BY_FIRST = {};
 	var SET_CLAUSE_TERMINATORS = [
@@ -4982,7 +4985,7 @@ var require_local_date = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	var lastTimezone = readTimezone();
 	function readTimezone() {
 		try {
-			return process.env.TZ;
+			return processModule.env.TZ;
 		} catch {
 			return;
 		}
@@ -5046,7 +5049,7 @@ var require_local_date = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 //#region node_modules/mysql2/lib/packets/packet.js
 var require_packet = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	var ErrorCodeToName = require_errors();
-	var NativeBuffer = __require("buffer").Buffer;
+	var NativeBuffer = __require("node:buffer").Buffer;
 	var Long = require_umd();
 	var StringParser = require_string();
 	var { localDate } = require_local_date();
@@ -6230,7 +6233,7 @@ var require_client = /* @__PURE__ */ __commonJSMin(((exports) => {
 //#endregion
 //#region node_modules/mysql2/lib/auth_41.js
 var require_auth_41 = /* @__PURE__ */ __commonJSMin(((exports) => {
-	var crypto$2 = __require("crypto");
+	var crypto$2 = __require("node:crypto");
 	function sha1(msg, msg1, msg2) {
 		const hash = crypto$2.createHash("sha1");
 		hash.update(msg);
@@ -7373,7 +7376,7 @@ var require_handshake = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			this.mariadbExtendedCapabilityFlags = args.mariadbExtendedCapabilityFlags;
 		}
 		setScrambleData(cb) {
-			__require("crypto").randomBytes(20, (err, data) => {
+			__require("node:crypto").randomBytes(20, (err, data) => {
 				if (err) {
 					cb(err);
 					return;
@@ -8019,7 +8022,7 @@ var require_text_row = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 //#endregion
 //#region node_modules/mysql2/lib/packets/index.js
 var require_packets = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	var process$5 = __require("process");
+	var process$4 = __require("node:process");
 	var ctorMap = {
 		AuthNextFactor: require_auth_next_factor(),
 		AuthSwitchRequest: require_auth_switch_request(),
@@ -8044,7 +8047,7 @@ var require_packets = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	};
 	Object.entries(ctorMap).forEach(([name, ctor]) => {
 		module.exports[name] = ctor;
-		if (process$5.env.NODE_DEBUG) {
+		if (process$4.env.NODE_DEBUG) {
 			if (ctor.prototype.toPacket) {
 				const old = ctor.prototype.toPacket;
 				ctor.prototype.toPacket = function() {
@@ -8122,8 +8125,8 @@ var require_packets = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 //#endregion
 //#region node_modules/mysql2/lib/commands/command.js
 var require_command = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	var EventEmitter$6 = __require("events").EventEmitter;
-	var Timers$3 = __require("timers");
+	var EventEmitter$6 = __require("node:events").EventEmitter;
+	var Timers$3 = __require("node:timers");
 	var Command = class extends EventEmitter$6 {
 		constructor() {
 			super();
@@ -8177,9 +8180,9 @@ var require_mariadb_client = /* @__PURE__ */ __commonJSMin(((exports) => {
 //#region node_modules/mysql2/lib/auth_plugins/sha256_password.js
 var require_sha256_password = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	var PLUGIN_NAME = "sha256_password";
-	var crypto$1 = __require("crypto");
+	var crypto$1 = __require("node:crypto");
 	var { xorRotating } = require_auth_41();
-	var Tls$1 = __require("tls");
+	var Tls$1 = __require("node:tls");
 	var REQUEST_SERVER_KEY_PACKET = Buffer.from([1]);
 	var STATE_INITIAL = 0;
 	var STATE_WAIT_SERVER_KEY = 1;
@@ -8221,7 +8224,7 @@ var require_sha256_password = /* @__PURE__ */ __commonJSMin(((exports, module) =
 //#region node_modules/mysql2/lib/auth_plugins/caching_sha2_password.js
 var require_caching_sha2_password = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 	var PLUGIN_NAME = "caching_sha2_password";
-	var crypto = __require("crypto");
+	var crypto = __require("node:crypto");
 	var { xor, xorRotating } = require_auth_41();
 	var REQUEST_SERVER_KEY_PACKET = Buffer.from([2]);
 	var FAST_AUTH_SUCCESS_PACKET = Buffer.from([3]);
@@ -8410,7 +8413,7 @@ var require_auth_switch = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 //#endregion
 //#region node_modules/mysql2/lib/compressed_protocol.js
 var require_compressed_protocol = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	var zlib = __require("zlib");
+	var zlib = __require("node:zlib");
 	var PacketParser = require_packet_parser();
 	var MIN_COMPRESS_LENGTH = 50;
 	var MAX_SYNC_INFLATE_LENGTH = 16384;
@@ -8424,7 +8427,7 @@ var require_compressed_protocol = /* @__PURE__ */ __commonJSMin(((exports, modul
 			this._queue.push(fn);
 			if (!this._running) {
 				this._running = true;
-				process.nextTick(() => this._next());
+				processModule.nextTick(() => this._next());
 			}
 		}
 		_next() {
@@ -8433,7 +8436,7 @@ var require_compressed_protocol = /* @__PURE__ */ __commonJSMin(((exports, modul
 				this._running = false;
 				return;
 			}
-			task({ done: () => process.nextTick(() => this._next()) });
+			task({ done: () => processModule.nextTick(() => this._next()) });
 		}
 	};
 	function handleCompressedPacket(packet) {
@@ -9552,7 +9555,7 @@ var require_ssl_profiles = /* @__PURE__ */ __commonJSMin(((exports) => {
 //#endregion
 //#region node_modules/mysql2/lib/connection_config.js
 var require_connection_config = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	var { URL } = __require("url");
+	var { URL } = __require("node:url");
 	var ClientConstants = require_client();
 	var Charsets = require_charsets();
 	var { version } = (init_package(), __toCommonJS(package_exports).default);
@@ -9815,9 +9818,9 @@ var require_connection_config = /* @__PURE__ */ __commonJSMin(((exports, module)
 //#endregion
 //#region node_modules/mysql2/lib/commands/query.js
 var require_query = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	var process$4 = __require("process");
-	var Timers$2 = __require("timers");
-	var Readable$1 = __require("stream").Readable;
+	var process$3 = __require("node:process");
+	var Timers$2 = __require("node:timers");
+	var Readable$1 = __require("node:stream").Readable;
 	var Command = require_command();
 	var Packets = require_packets();
 	var getTextParser = require_text_parser();
@@ -9879,10 +9882,10 @@ var require_query = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 					rows = this._rows;
 					fields = this._fields;
 				}
-				if (fields) process$4.nextTick(() => {
+				if (fields) process$3.nextTick(() => {
 					this.onResult(null, rows, fields);
 				});
-				else process$4.nextTick(() => {
+				else process$3.nextTick(() => {
 					this.onResult(null, rows);
 				});
 			}
@@ -10404,7 +10407,7 @@ var require_static_binary_parser = /* @__PURE__ */ __commonJSMin(((exports, modu
 //#endregion
 //#region node_modules/mysql2/lib/commands/execute.js
 var require_execute = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	var Timers$1 = __require("timers");
+	var Timers$1 = __require("node:timers");
 	var Command = require_command();
 	var Query = require_query();
 	var Packets = require_packets();
@@ -10608,7 +10611,7 @@ var require_ping = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			return Ping.prototype.pingResponse;
 		}
 		pingResponse() {
-			if (this.onResult) process.nextTick(this.onResult.bind(this));
+			if (this.onResult) processModule.nextTick(this.onResult.bind(this));
 			return null;
 		}
 	};
@@ -10630,7 +10633,7 @@ var require_register_slave = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 			return RegisterSlave.prototype.registerResponse;
 		}
 		registerResponse() {
-			if (this.onResult) process.nextTick(this.onResult.bind(this));
+			if (this.onResult) processModule.nextTick(this.onResult.bind(this));
 			return null;
 		}
 	};
@@ -10887,7 +10890,7 @@ var require_reset_connection = /* @__PURE__ */ __commonJSMin(((exports, module) 
 		}
 		resetConnectionResponse(packet, connection) {
 			if (connection._statements) connection._statements.clear();
-			if (this.onResult) process.nextTick(this.onResult.bind(this, null));
+			if (this.onResult) processModule.nextTick(this.onResult.bind(this, null));
 			return null;
 		}
 	};
@@ -10993,10 +10996,10 @@ var require_tls_session_cache = /* @__PURE__ */ __commonJSMin(((exports, module)
 //#endregion
 //#region node_modules/mysql2/lib/tracing.js
 var require_tracing = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	var process$3 = __require("process");
+	var process$2 = __require("node:process");
 	var dc = (() => {
 		try {
-			return "getBuiltinModule" in process$3 ? process$3.getBuiltinModule("node:diagnostics_channel") : __require("node:diagnostics_channel");
+			return "getBuiltinModule" in process$2 ? process$2.getBuiltinModule("node:diagnostics_channel") : __require("node:diagnostics_channel");
 		} catch {
 			return;
 		}
@@ -11171,11 +11174,11 @@ var require_named_placeholders = /* @__PURE__ */ __commonJSMin(((exports, module
 //#endregion
 //#region node_modules/mysql2/lib/base/connection.js
 var require_connection$2 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	var Net = __require("net");
-	var Tls = __require("tls");
-	var Timers = __require("timers");
-	var EventEmitter$5 = __require("events").EventEmitter;
-	var Readable = __require("stream").Readable;
+	var Net = __require("node:net");
+	var Tls = __require("node:tls");
+	var Timers = __require("node:timers");
+	var EventEmitter$5 = __require("node:events").EventEmitter;
+	var Readable = __require("node:stream").Readable;
 	var Queue = require_ring_queue();
 	var SqlString = require_lib();
 	var { createLRU } = require_lib$1();
@@ -12014,7 +12017,7 @@ var require_inherit_events = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 //#endregion
 //#region node_modules/mysql2/lib/promise/connection.js
 var require_connection$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	var EventEmitter$4 = __require("events").EventEmitter;
+	var EventEmitter$4 = __require("node:events").EventEmitter;
 	var PromisePreparedStatementInfo = require_prepared_statement_info();
 	var { captureStackHolder, applyCapturedStack } = require_capture_local_err();
 	var makeDoneCb = require_make_done_cb();
@@ -12267,9 +12270,9 @@ var require_pool_connection = /* @__PURE__ */ __commonJSMin(((exports, module) =
 //#endregion
 //#region node_modules/mysql2/lib/base/pool.js
 var require_pool$2 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	var process$2 = __require("process");
+	var process$1 = __require("node:process");
 	var SqlString = require_lib();
-	var EventEmitter$3 = __require("events").EventEmitter;
+	var EventEmitter$3 = __require("node:events").EventEmitter;
 	var PoolConnection = require_pool_connection();
 	var Queue = require_ring_queue();
 	var BaseConnection = require_connection$2();
@@ -12311,12 +12314,12 @@ var require_pool$2 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 		}
 		getConnection(cb) {
 			const _getConnection = (cb) => {
-				if (this._closed) return process$2.nextTick(() => cb(/* @__PURE__ */ new Error("Pool is closed.")));
+				if (this._closed) return process$1.nextTick(() => cb(/* @__PURE__ */ new Error("Pool is closed.")));
 				let connection;
 				if (this._freeConnections.length > 0) {
 					connection = this._freeConnections.pop();
 					this.emit("acquire", connection);
-					return process$2.nextTick(() => {
+					return process$1.nextTick(() => {
 						connection._released = false;
 						cb(null, connection);
 					});
@@ -12332,7 +12335,7 @@ var require_pool$2 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 						return cb(null, connection);
 					});
 				}
-				if (!this.config.waitForConnections) return process$2.nextTick(() => cb(/* @__PURE__ */ new Error("No connections available.")));
+				if (!this.config.waitForConnections) return process$1.nextTick(() => cb(/* @__PURE__ */ new Error("No connections available.")));
 				if (this.config.queueLimit && this._connectionQueue.length >= this.config.queueLimit) return cb(/* @__PURE__ */ new Error("Queue limit reached."));
 				this.emit("enqueue");
 				return this._connectionQueue.push(cb);
@@ -12352,7 +12355,7 @@ var require_pool$2 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			if (!connection._pool) {
 				if (this._connectionQueue.length) {
 					cb = this._connectionQueue.shift();
-					process$2.nextTick(this.getConnection.bind(this, cb));
+					process$1.nextTick(this.getConnection.bind(this, cb));
 				}
 				return;
 			}
@@ -12363,7 +12366,7 @@ var require_pool$2 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 					connection.destroy();
 					if (this._connectionQueue.length) {
 						cb = this._connectionQueue.shift();
-						process$2.nextTick(this.getConnection.bind(this, cb));
+						process$1.nextTick(this.getConnection.bind(this, cb));
 					}
 					return;
 				}
@@ -12375,7 +12378,7 @@ var require_pool$2 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			let cb;
 			if (this._connectionQueue.length) {
 				cb = this._connectionQueue.shift();
-				process$2.nextTick(() => {
+				process$1.nextTick(() => {
 					connection._released = false;
 					cb(null, connection);
 				});
@@ -12395,7 +12398,7 @@ var require_pool$2 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 			};
 			while (this._connectionQueue.length > 0) {
 				const queuedCallback = this._connectionQueue.shift();
-				process$2.nextTick(() => queuedCallback(/* @__PURE__ */ new Error("Pool is closed.")));
+				process$1.nextTick(() => queuedCallback(/* @__PURE__ */ new Error("Pool is closed.")));
 			}
 			let calledBack = false;
 			let closedConnections = 0;
@@ -12499,7 +12502,7 @@ var require_pool$2 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 //#endregion
 //#region node_modules/mysql2/lib/promise/pool.js
 var require_pool$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	var EventEmitter$2 = __require("events").EventEmitter;
+	var EventEmitter$2 = __require("node:events").EventEmitter;
 	var { captureStackHolder, applyCapturedStack } = require_capture_local_err();
 	var makeDoneCb = require_make_done_cb();
 	var PromisePoolConnection = require_pool_connection$1();
@@ -12613,11 +12616,11 @@ var require_pool_config = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 //#endregion
 //#region node_modules/mysql2/lib/pool_cluster.js
 var require_pool_cluster$1 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
-	var process$1 = __require("process");
+	var process = __require("node:process");
 	var Pool = require_pool();
 	var PoolConfig = require_pool_config();
 	var Connection = require_connection();
-	var EventEmitter$1 = __require("events").EventEmitter;
+	var EventEmitter$1 = __require("node:events").EventEmitter;
 	/**
 	* Selector
 	*/
@@ -12635,10 +12638,10 @@ var require_pool_cluster$1 = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 	};
 	var getMonotonicMilliseconds = function() {
 		let ms;
-		if (typeof process$1.hrtime === "function") {
-			ms = process$1.hrtime();
+		if (typeof process.hrtime === "function") {
+			ms = process.hrtime();
 			ms = ms[0] * 1e3 + ms[1] * 1e-6;
-		} else ms = process$1.uptime() * 1e3;
+		} else ms = process.uptime() * 1e3;
 		return Math.floor(ms);
 	};
 	var patternRegExp = function(pattern) {
@@ -12804,7 +12807,7 @@ var require_pool_cluster$1 = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 				if (err) throw err;
 			};
 			if (this._closed) {
-				process$1.nextTick(cb);
+				process.nextTick(cb);
 				return;
 			}
 			this._closed = true;
@@ -12820,7 +12823,7 @@ var require_pool_cluster$1 = /* @__PURE__ */ __commonJSMin(((exports, module) =>
 				waitingClose++;
 				this._nodes[id].pool.end(onEnd);
 			}
-			if (waitingClose === 0) process$1.nextTick(onEnd);
+			if (waitingClose === 0) process.nextTick(onEnd);
 		}
 		_findNodeIds(pattern, includeOffline) {
 			let currentTime = 0;
@@ -12961,7 +12964,7 @@ var require_pool_cluster = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 //#region node_modules/mysql2/promise.js
 var require_promise = /* @__PURE__ */ __commonJSMin(((exports) => {
 	var SqlString = require_lib();
-	var EventEmitter = __require("events").EventEmitter;
+	var EventEmitter = __require("node:events").EventEmitter;
 	var parserCache = require_parser_cache();
 	var PoolCluster = require_pool_cluster$1();
 	var createConnection = require_create_connection();

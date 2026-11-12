@@ -1,5 +1,6 @@
 import { o as __toESM, r as __exportAll } from "../_runtime.mjs";
 import { t as __exportAll$1 } from "./rolldown-runtime-D7D4PA-g.mjs";
+import processModule from "node:process";
 //#region node_modules/.nitro/vite/services/ssr/assets/db.server-BuqUzfMP.js
 var db_server_BuqUzfMP_exports = /* @__PURE__ */ __exportAll({
 	n: () => getDb,
@@ -18,7 +19,7 @@ async function loadEnvironment() {
 	(await import("../_libs/dotenv.mjs").then((n) => /* @__PURE__ */ __toESM(n.t()))).config({ quiet: true });
 }
 function required(name) {
-	const value = process.env[name];
+	const value = processModule.env[name];
 	if (!value) throw new Error(`Missing ${name} for admin authentication.`);
 	return value;
 }
@@ -27,7 +28,7 @@ async function getDb() {
 	if (!poolPromise) poolPromise = (async () => {
 		await loadEnvironment();
 		const mysql = await import("../_libs/mysql2+[...].mjs").then((n) => /* @__PURE__ */ __toESM(n.t()));
-		const port = Number.parseInt(process.env["DB_PORT"] ?? "3306", 10);
+		const port = Number.parseInt(processModule.env["DB_PORT"] ?? "3306", 10);
 		return mysql.createPool({
 			host: required("DB_HOST"),
 			port: Number.isFinite(port) ? port : 3306,
@@ -44,7 +45,7 @@ async function getDb() {
 }
 async function getEnvironmentValue(name) {
 	await loadEnvironment();
-	return process.env[name] ?? "";
+	return processModule.env[name] ?? "";
 }
 //#endregion
 export { getDb as n, getEnvironmentValue as r, db_server_BuqUzfMP_exports as t };
