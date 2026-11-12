@@ -1,6 +1,6 @@
 import { Environment, Lightformer } from "@react-three/drei";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { Egg } from "./Egg";
 import { live } from "./live";
@@ -14,7 +14,10 @@ const NIGHT_FOG = new THREE.Color("#0a2a3a");
 const DEEP_FOG = new THREE.Color("#06374a");
 const tmp = new THREE.Color();
 // Dev-only: `?snap` skips scroll smoothing so automated screenshots land on exact story beats.
-const SNAP = import.meta.env.DEV && typeof window !== "undefined" && new URLSearchParams(window.location.search).has("snap");
+const SNAP =
+  import.meta.env.DEV &&
+  typeof window !== "undefined" &&
+  new URLSearchParams(window.location.search).has("snap");
 
 /** The one stepper: advances progress, story, camera and atmosphere before anything reads them. */
 function Stepper({ onReady }: { onReady: () => void }) {
@@ -42,7 +45,11 @@ function Stepper({ onReady }: { onReady: () => void }) {
     }
     // On phones, lift the view so the turtle sits in the lower half, below the text cards.
     const lift = narrow ? 0.45 : 0;
-    cam.position.set(story.camPos.x + s.px * 0.35, story.camPos.y + s.py * 0.18 + lift, story.camPos.z);
+    cam.position.set(
+      story.camPos.x + s.px * 0.35,
+      story.camPos.y + s.py * 0.18 + lift,
+      story.camPos.z,
+    );
     cam.lookAt(story.camTarget.x, story.camTarget.y + lift, story.camTarget.z);
 
     const uw = smoothstep(0.08, -0.35, cam.position.y);
@@ -66,15 +73,27 @@ function Stepper({ onReady }: { onReady: () => void }) {
   return (
     <>
       <hemisphereLight ref={hemi} args={["#4d8fb0", "#3a3226", 0.75]} />
-      <directionalLight ref={moon} position={MOON_DIR.clone().multiplyScalar(30).toArray()} color="#d6f1ff" intensity={2.2} />
+      <directionalLight
+        ref={moon}
+        position={MOON_DIR.clone().multiplyScalar(30).toArray()}
+        color="#d6f1ff"
+        intensity={2.2}
+      />
       <ambientLight intensity={0.18} color="#7fb8d0" />
     </>
   );
 }
 
 export default function OceanScene({ onReady }: { onReady: () => void }) {
+  const [visible, setVisible] = useState(() => typeof document === "undefined" || !document.hidden);
+  useEffect(() => {
+    const onVisibility = () => setVisible(!document.hidden);
+    document.addEventListener("visibilitychange", onVisibility, { passive: true });
+    return () => document.removeEventListener("visibilitychange", onVisibility);
+  }, []);
   return (
     <Canvas
+      frameloop={visible ? "always" : "never"}
       dpr={[1, 1.5]}
       gl={{ antialias: true, powerPreference: "high-performance" }}
       camera={{ fov: 40, near: 0.05, far: 700, position: [-8, 1.5, 6.6] }}
@@ -86,9 +105,27 @@ export default function OceanScene({ onReady }: { onReady: () => void }) {
     >
       <Stepper onReady={onReady} />
       <Environment resolution={64} frames={1}>
-        <Lightformer intensity={2} position={[0, 6, 0]} rotation-x={Math.PI / 2} scale={[12, 12, 1]} color="#bff4ff" />
-        <Lightformer intensity={1.2} position={[-6, 1, -2]} rotation-y={Math.PI / 2} scale={[20, 2, 1]} color="#3ec7cf" />
-        <Lightformer intensity={0.8} position={[6, 2, 4]} rotation-y={-Math.PI / 2} scale={[10, 3, 1]} color="#1d6f8a" />
+        <Lightformer
+          intensity={2}
+          position={[0, 6, 0]}
+          rotation-x={Math.PI / 2}
+          scale={[12, 12, 1]}
+          color="#bff4ff"
+        />
+        <Lightformer
+          intensity={1.2}
+          position={[-6, 1, -2]}
+          rotation-y={Math.PI / 2}
+          scale={[20, 2, 1]}
+          color="#3ec7cf"
+        />
+        <Lightformer
+          intensity={0.8}
+          position={[6, 2, 4]}
+          rotation-y={-Math.PI / 2}
+          scale={[10, 3, 1]}
+          color="#1d6f8a"
+        />
       </Environment>
       <Sky />
       <Terrain />

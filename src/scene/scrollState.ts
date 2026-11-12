@@ -27,14 +27,34 @@ function update() {
 export function startScrollStory(): () => void {
   measure();
   update();
-  const onScroll = () => update();
+  let scrollFrame = 0;
+  let resizeFrame = 0;
+  let pointerFrame = 0;
+  let pointer: PointerEvent | undefined;
+  const onScroll = () => {
+    if (scrollFrame) return;
+    scrollFrame = requestAnimationFrame(() => {
+      scrollFrame = 0;
+      update();
+    });
+  };
   const onResize = () => {
-    measure();
-    update();
+    if (resizeFrame) return;
+    resizeFrame = requestAnimationFrame(() => {
+      resizeFrame = 0;
+      measure();
+      update();
+    });
   };
   const onPointer = (e: PointerEvent) => {
-    scrollState.pointerX = (e.clientX / window.innerWidth) * 2 - 1;
-    scrollState.pointerY = -((e.clientY / window.innerHeight) * 2 - 1);
+    pointer = e;
+    if (pointerFrame) return;
+    pointerFrame = requestAnimationFrame(() => {
+      pointerFrame = 0;
+      if (!pointer) return;
+      scrollState.pointerX = (pointer.clientX / window.innerWidth) * 2 - 1;
+      scrollState.pointerY = -((pointer.clientY / window.innerHeight) * 2 - 1);
+    });
   };
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", onResize);
@@ -45,6 +65,9 @@ export function startScrollStory(): () => void {
     window.removeEventListener("scroll", onScroll);
     window.removeEventListener("resize", onResize);
     window.removeEventListener("pointermove", onPointer);
+    cancelAnimationFrame(scrollFrame);
+    cancelAnimationFrame(resizeFrame);
+    cancelAnimationFrame(pointerFrame);
     ro.disconnect();
   };
 }

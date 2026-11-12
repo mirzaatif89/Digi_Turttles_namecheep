@@ -14,4 +14,9 @@ describe("App routing", () => {
 
     expect(matches.at(-1)?.routeId).not.toBe(rootRouteId);
   });
+
+  it("matches login independently from the protected admin layout", () => {
+    const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });
+    expect(router.matchRoutes("/login").at(-1)?.routeId).toBe("/login");
+  });
 });

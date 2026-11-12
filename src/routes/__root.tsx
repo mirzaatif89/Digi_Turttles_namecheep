@@ -79,10 +79,16 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Digi Turtles — Institute + Agency" },
-      { name: "description", content: "Digi Turtles: practical digital skills and real business growth under one roof." },
+      {
+        name: "description",
+        content: "Digi Turtles: practical digital skills and real business growth under one roof.",
+      },
       { name: "author", content: "Digi Turtles" },
       { property: "og:title", content: "Digi Turtles — Institute + Agency" },
-      { property: "og:description", content: "Practical digital skills and real business growth under one roof." },
+      {
+        property: "og:description",
+        content: "Practical digital skills and real business growth under one roof.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -113,6 +119,12 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
       </head>
       <body>
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "try{document.documentElement.dataset.adminTheme=localStorage.getItem('digiturtle-admin-theme')==='light'?'light':'dark'}catch(_){}",
+          }}
+        />
         {children}
         <Scripts />
       </body>

@@ -1,12 +1,58 @@
-import { ArrowRight, Bot, Gem, GraduationCap, Megaphone, Plus, Quote, Search, Sparkles, Target } from "lucide-react";
+import {
+  ArrowRight,
+  Bot,
+  ChartNoAxesCombined,
+  Code2,
+  Gem,
+  GraduationCap,
+  Megaphone,
+  Palette,
+  Plus,
+  Quote,
+  Search,
+  Sparkles,
+  Target,
+} from "lucide-react";
+import { memo } from "react";
 import classroom from "@/assets/classroom.jpg";
 import { ANCHOR } from "@/scene/story";
-import { COURSES, FAQS, PARTNERS, PHILOSOPHY, POSTS, PROJECTS, REVIEWS, SERVICES, TEAM } from "./content";
+import {
+  COURSES,
+  FAQS,
+  PARTNERS,
+  PHILOSOPHY,
+  POSTS,
+  PROJECTS,
+  REVIEWS,
+  SERVICES,
+  TEAM,
+} from "./content";
 import { Tilt } from "./Tilt";
+import type { PublicService, ServiceIconName } from "@/lib/services.schemas";
 
-const ICONS = { Target, Megaphone, Bot, Search, Gem, GraduationCap };
+const ICONS: Record<ServiceIconName, typeof Target> = {
+  Target,
+  Megaphone,
+  Bot,
+  Search,
+  Gem,
+  GraduationCap,
+  ChartNoAxesCombined,
+  Palette,
+  Code2,
+};
 
-function Heading({ eyebrow, title, text, center }: { eyebrow: string; title: string; text?: string; center?: boolean }) {
+function Heading({
+  eyebrow,
+  title,
+  text,
+  center,
+}: {
+  eyebrow: string;
+  title: string;
+  text?: string;
+  center?: boolean;
+}) {
   return (
     <div className={`text-depth mb-12 max-w-2xl ${center ? "mx-auto text-center" : ""}`}>
       <span className="eyebrow">
@@ -19,7 +65,7 @@ function Heading({ eyebrow, title, text, center }: { eyebrow: string; title: str
   );
 }
 
-export function Hero() {
+function HeroSection() {
   const chips = [
     { label: "AI Automation", pos: "left-[4%] top-[18%]", delay: "0s" },
     { label: "Brand Building", pos: "right-[6%] top-[24%]", delay: "1.2s" },
@@ -30,7 +76,9 @@ export function Hero() {
     <section id="home" className="relative flex min-h-screen items-center px-6 pt-28">
       <div className="mx-auto grid w-full max-w-7xl items-center gap-10 lg:grid-cols-2">
         <div className="text-depth">
-          <span className="glass-pill inline-flex rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.3em] text-primary-glow">Institute + Agency</span>
+          <span className="glass-pill inline-flex rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.3em] text-primary-glow">
+            Institute + Agency
+          </span>
           <h1 className="mt-6 text-5xl font-extrabold leading-[1.02] tracking-tight sm:text-6xl xl:text-7xl">
             Learn. Build.
             <br />
@@ -39,7 +87,8 @@ export function Hero() {
             Become Independent.
           </h1>
           <p className="mt-6 max-w-lg text-lg text-muted-foreground">
-            Digital skills + the turtle mindset. Practical education for learners and real growth for businesses — under one roof.
+            Digital skills + the turtle mindset. Practical education for learners and real growth
+            for businesses — under one roof.
           </p>
           <div className="mt-8 flex flex-wrap gap-3">
             <a href="#services" className="btn-hero">
@@ -64,14 +113,21 @@ export function Hero() {
         </div>
         <div className="relative hidden h-[520px] lg:block" aria-hidden>
           {chips.map((c) => (
-            <span key={c.label} className={`glass-pill absolute ${c.pos} animate-float rounded-full px-4 py-2 text-sm font-semibold`} style={{ animationDelay: c.delay }}>
+            <span
+              key={c.label}
+              className={`glass-pill absolute ${c.pos} animate-float rounded-full px-4 py-2 text-sm font-semibold`}
+              style={{ animationDelay: c.delay }}
+            >
               <span className="mr-2 inline-block h-2 w-2 rounded-full bg-primary shadow-[var(--shadow-glow)]" />
               {c.label}
             </span>
           ))}
         </div>
       </div>
-      <a href="#hatch" className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 flex-col sm:flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground">
+      <a
+        href="#hatch"
+        className="absolute bottom-8 left-1/2 hidden -translate-x-1/2 flex-col sm:flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-muted-foreground"
+      >
         Scroll to hatch
         <span className="animate-bob block h-8 w-5 rounded-full border border-border">
           <span className="mx-auto mt-1.5 block h-2 w-1 rounded-full bg-primary" />
@@ -82,9 +138,25 @@ export function Hero() {
 }
 
 /** Tall breathing-room sections where the 3D story takes centre stage. */
-export function Interlude({ id, story, step, title, text }: { id: string; story: number; step: string; title: string; text: string }) {
+function InterludeSection({
+  id,
+  story,
+  step,
+  title,
+  text,
+}: {
+  id: string;
+  story: number;
+  step: string;
+  title: string;
+  text: string;
+}) {
   return (
-    <section id={id} data-story={story} className="relative flex min-h-[115vh] items-start px-6 pt-[16vh] md:items-center md:pt-0">
+    <section
+      id={id}
+      data-story={story}
+      className="relative flex min-h-[115vh] items-start px-6 pt-[16vh] md:items-center md:pt-0"
+    >
       <div className="mx-auto w-full max-w-7xl">
         <div className="glass max-w-sm rounded-3xl p-7">
           <span className="eyebrow">{step}</span>
@@ -96,13 +168,16 @@ export function Interlude({ id, story, step, title, text }: { id: string; story:
   );
 }
 
-export function Marquee({ items, big }: { items: string[]; big?: boolean }) {
+function MarqueeSection({ items, big }: { items: string[]; big?: boolean }) {
   const row = [...items, ...items];
   return (
     <div className="glass-pill relative overflow-hidden border-x-0 py-5">
       <div className="animate-marquee flex w-max gap-10">
         {row.map((c, i) => (
-          <span key={i} className={`flex items-center gap-10 whitespace-nowrap font-display font-semibold ${big ? "text-2xl tracking-widest text-muted-foreground" : "text-lg"}`}>
+          <span
+            key={i}
+            className={`flex items-center gap-10 whitespace-nowrap font-display font-semibold ${big ? "text-2xl tracking-widest text-muted-foreground" : "text-lg"}`}
+          >
             {c}
             <Sparkles className="h-4 w-4 text-primary" />
           </span>
@@ -112,12 +187,20 @@ export function Marquee({ items, big }: { items: string[]; big?: boolean }) {
   );
 }
 
-export function About() {
+function AboutSection() {
   return (
     <section id="about" className="px-6 py-28">
       <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-2">
         <Tilt className="overflow-hidden rounded-[2rem] p-3">
-          <img src={classroom} alt="Students learning digital skills" className="aspect-[4/5] w-full rounded-[1.5rem] object-cover" loading="lazy" width={640} height={800} />
+          <img
+            src={classroom}
+            alt="Students learning digital skills"
+            className="aspect-[4/5] w-full rounded-[1.5rem] object-cover"
+            loading="lazy"
+            decoding="async"
+            width={640}
+            height={800}
+          />
           <div className="glass-pill tilt-pop absolute bottom-8 left-8 right-8 rounded-2xl p-4 font-display font-semibold">
             Learn → Build <span className="text-muted-foreground">→ Showcase → Monetize</span>
           </div>
@@ -128,7 +211,9 @@ export function About() {
             Not the fastest. <span className="text-gradient">The one that keeps moving.</span>
           </h2>
           <p className="mt-6 text-lg text-muted-foreground">
-            Digi Turtles brings an Institute for practical skills and an Agency for real business growth together — so learners become professionals and businesses become stronger, more independent brands.
+            Digi Turtles brings an Institute for practical skills and an Agency for real business
+            growth together — so learners become professionals and businesses become stronger, more
+            independent brands.
           </p>
           <a href="#team" className="btn-glass mt-8">
             Our story <ArrowRight className="h-4 w-4" />
@@ -139,13 +224,17 @@ export function About() {
   );
 }
 
-export function Services() {
+function ServicesSection({
+  services = SERVICES,
+}: {
+  services?: ReadonlyArray<Pick<PublicService, "title" | "text" | "icon">>;
+}) {
   return (
     <section id="services" className="px-6 py-28">
       <div className="mx-auto max-w-7xl">
         <Heading eyebrow="Agency services" title="Your growth partner, not a vendor" />
         <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {SERVICES.map((s) => {
+          {services.map((s) => {
             const Icon = ICONS[s.icon];
             return (
               <Tilt key={s.title} className="rounded-3xl p-7">
@@ -163,7 +252,7 @@ export function Services() {
   );
 }
 
-export function Philosophy() {
+function PhilosophySection() {
   return (
     <section className="px-6 py-28">
       <div className="mx-auto max-w-7xl">
@@ -182,7 +271,7 @@ export function Philosophy() {
   );
 }
 
-export function Portfolio() {
+function PortfolioSection() {
   return (
     <section id="portfolio" className="px-6 py-28">
       <div className="mx-auto max-w-7xl">
@@ -196,10 +285,20 @@ export function Portfolio() {
           {PROJECTS.map((p) => (
             <Tilt key={p.title} className="group overflow-hidden rounded-3xl p-2.5">
               <div className="overflow-hidden rounded-[1.25rem]">
-                <img src={p.img} alt={p.title} loading="lazy" className="aspect-[4/3] w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                <img
+                  src={p.img}
+                  alt={p.title}
+                  loading="lazy"
+                  decoding="async"
+                  width={640}
+                  height={480}
+                  className="aspect-[4/3] w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
               </div>
               <div className="p-4">
-                <span className="text-xs font-semibold uppercase tracking-widest text-primary-glow">{p.tag}</span>
+                <span className="text-xs font-semibold uppercase tracking-widest text-primary-glow">
+                  {p.tag}
+                </span>
                 <h3 className="mt-1 text-xl font-semibold">{p.title}</h3>
               </div>
             </Tilt>
@@ -210,7 +309,7 @@ export function Portfolio() {
   );
 }
 
-export function Team() {
+function TeamSection() {
   return (
     <section id="team" className="px-6 py-28">
       <div className="mx-auto max-w-7xl">
@@ -218,7 +317,15 @@ export function Team() {
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {TEAM.map((m) => (
             <Tilt key={m.name} className="rounded-3xl p-2.5">
-              <img src={m.img} alt={`${m.name}, ${m.role}`} loading="lazy" className="aspect-[4/5] w-full rounded-[1.25rem] object-cover" />
+              <img
+                src={m.img}
+                alt={`${m.name}, ${m.role}`}
+                loading="lazy"
+                decoding="async"
+                width={640}
+                height={800}
+                className="aspect-[4/5] w-full rounded-[1.25rem] object-cover"
+              />
               <div className="p-4">
                 <h3 className="text-lg font-semibold">{m.name}</h3>
                 <p className="text-sm font-medium text-primary-glow">{m.role}</p>
@@ -232,7 +339,7 @@ export function Team() {
   );
 }
 
-export function Blog() {
+function BlogSection() {
   return (
     <section id="blog" className="px-6 py-28">
       <div className="mx-auto max-w-7xl">
@@ -241,10 +348,20 @@ export function Blog() {
           {POSTS.map((p) => (
             <Tilt key={p.title} className="group rounded-3xl p-2.5">
               <div className="overflow-hidden rounded-[1.25rem]">
-                <img src={p.img} alt={p.title} loading="lazy" className="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                <img
+                  src={p.img}
+                  alt={p.title}
+                  loading="lazy"
+                  decoding="async"
+                  width={640}
+                  height={400}
+                  className="aspect-[16/10] w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                />
               </div>
               <div className="p-4">
-                <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">{p.meta}</p>
+                <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                  {p.meta}
+                </p>
                 <h3 className="mt-2 text-xl font-semibold">{p.title}</h3>
                 <p className="mt-2 text-sm text-muted-foreground">{p.text}</p>
               </div>
@@ -256,15 +373,20 @@ export function Blog() {
   );
 }
 
-export function Cta() {
+function CtaSection() {
   return (
     <section id="contact" className="px-6 py-20">
-      <Tilt max={4} className="mx-auto max-w-5xl overflow-hidden rounded-[2.5rem] px-8 py-16 text-center md:px-16">
+      <Tilt
+        max={4}
+        className="mx-auto max-w-5xl overflow-hidden rounded-[2.5rem] px-8 py-16 text-center md:px-16"
+      >
         <div className="absolute -top-24 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full bg-primary/30 blur-3xl" />
         <h2 className="text-4xl font-bold md:text-6xl">
           Your journey <span className="text-gradient">starts here.</span>
         </h2>
-        <p className="mx-auto mt-4 max-w-xl text-lg text-muted-foreground">Take the first bold step — join a course or let our agency grow your brand.</p>
+        <p className="mx-auto mt-4 max-w-xl text-lg text-muted-foreground">
+          Take the first bold step — join a course or let our agency grow your brand.
+        </p>
         <a href="mailto:hello@digiturtles.com" className="btn-hero mt-8">
           Get in touch <ArrowRight className="h-4 w-4" />
         </a>
@@ -273,22 +395,32 @@ export function Cta() {
   );
 }
 
-export function Partners() {
+function PartnersSection() {
   return (
     <section className="py-20">
       <div className="px-6">
-        <Heading center eyebrow="Trusted partnerships" title="Brands we've worked with" text="Helping teams turn ideas into systems, campaigns and growth." />
+        <Heading
+          center
+          eyebrow="Trusted partnerships"
+          title="Brands we've worked with"
+          text="Helping teams turn ideas into systems, campaigns and growth."
+        />
       </div>
       <Marquee items={PARTNERS} big />
     </section>
   );
 }
 
-export function Reviews() {
+function ReviewsSection() {
   return (
     <section className="px-6 py-28">
       <div className="mx-auto max-w-7xl">
-        <Heading center eyebrow="Client reviews" title="Work that keeps people moving" text="A few words about the systems, campaigns and learning experiences we create together." />
+        <Heading
+          center
+          eyebrow="Client reviews"
+          title="Work that keeps people moving"
+          text="A few words about the systems, campaigns and learning experiences we create together."
+        />
         <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {REVIEWS.map((r) => (
             <Tilt key={r.name} className="flex flex-col rounded-3xl p-7">
@@ -314,12 +446,16 @@ export function Reviews() {
   );
 }
 
-export function Faq() {
+function FaqSection() {
   return (
     <section className="px-6 py-28">
       <div className="mx-auto grid max-w-7xl gap-10 lg:grid-cols-[1fr_1.4fr]">
         <div>
-          <Heading eyebrow="FAQ" title="Questions before your first step?" text="Here are the answers to the things clients and learners ask us most often." />
+          <Heading
+            eyebrow="FAQ"
+            title="Questions before your first step?"
+            text="Here are the answers to the things clients and learners ask us most often."
+          />
           <div className="glass rounded-3xl p-6">
             <p className="font-semibold">Still have questions?</p>
             <a href="#contact" className="btn-hero mt-4">
@@ -343,14 +479,16 @@ export function Faq() {
   );
 }
 
-export function Footer() {
+function FooterSection() {
   return (
     <footer className="px-6 pb-8 pt-16">
       <div className="glass glass-strong mx-auto max-w-7xl rounded-[2rem] p-8 md:p-12">
         <div className="grid gap-10 md:grid-cols-3">
           <div>
             <p className="font-display text-xl font-bold">DIGI TURTLES</p>
-            <p className="mt-2 text-muted-foreground">Institute + Agency. Learn. Build. Grow. Become Independent.</p>
+            <p className="mt-2 text-muted-foreground">
+              Institute + Agency. Learn. Build. Grow. Become Independent.
+            </p>
           </div>
           <div>
             <p className="eyebrow">Explore</p>
@@ -364,16 +502,52 @@ export function Footer() {
           </div>
           <div>
             <p className="font-display text-lg font-semibold">Keep Moving. Keep Growing.</p>
-            <p className="mt-2 text-sm text-muted-foreground">Your journey starts with one bold first step.</p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              Your journey starts with one bold first step.
+            </p>
             <a href="#contact" className="btn-hero mt-4">
               Start Today
             </a>
           </div>
         </div>
-        <div className="mt-10 border-t pt-6 text-sm text-muted-foreground">© 2026 Digi Turtles · Learn | Create | Grow</div>
+        <div className="mt-10 border-t pt-6 text-sm text-muted-foreground">
+          © 2026 Digi Turtles · Learn | Create | Grow
+        </div>
       </div>
     </footer>
   );
 }
 
-export { ANCHOR, COURSES };
+const Hero = memo(HeroSection);
+const Interlude = memo(InterludeSection);
+const Marquee = memo(MarqueeSection);
+const About = memo(AboutSection);
+const Services = memo(ServicesSection);
+const Philosophy = memo(PhilosophySection);
+const Portfolio = memo(PortfolioSection);
+const Team = memo(TeamSection);
+const Blog = memo(BlogSection);
+const Cta = memo(CtaSection);
+const Partners = memo(PartnersSection);
+const Reviews = memo(ReviewsSection);
+const Faq = memo(FaqSection);
+const Footer = memo(FooterSection);
+
+export {
+  About,
+  ANCHOR,
+  Blog,
+  COURSES,
+  Cta,
+  Faq,
+  Footer,
+  Hero,
+  Interlude,
+  Marquee,
+  Partners,
+  Philosophy,
+  Portfolio,
+  Reviews,
+  Services,
+  Team,
+};
