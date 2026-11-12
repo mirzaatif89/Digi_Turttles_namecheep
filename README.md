@@ -35,8 +35,8 @@ Use Node.js `^20.19.0` or `>=22.12.0` and choose one deployment layout:
 
 This is the current `digiturtles.com` layout. After pulling the repository on
 the server, run `npm ci` and `npm run build` in the app root. In cPanel's Node.js
-app setup, use `.output/server/index.mjs` as the startup file, attach the domain,
-and restart the app.
+app setup, use `app.js` as the startup file, attach the domain, and restart the
+app. The wrapper starts `.output/server/index.mjs` after each server build.
 
 ### Prebuilt output is uploaded to the Node.js app root
 
@@ -45,8 +45,8 @@ Run `npm ci` and `npm run build` before uploading. Upload the **contents** of
 Use `server/index.mjs` as the startup file, then restart the app.
 
 For either layout, add these environment variables in cPanel (never commit their values):
-   `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `ADMIN_NAME`,
-   `ADMIN_EMAIL`, `ADMIN_PASSWORD`, and `NODE_ENV=production`.
+`DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `ADMIN_NAME`,
+`ADMIN_EMAIL`, `ADMIN_PASSWORD`, and `NODE_ENV=production`.
 
 The database must be reachable from the hosting account. If the cPanel plan
 doesn't offer Node.js applications, this SSR app needs a Node.js host or VPS;
