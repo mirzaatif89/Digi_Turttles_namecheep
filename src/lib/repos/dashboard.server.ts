@@ -4,7 +4,6 @@ import {
   dashboardModuleMeta,
   dashboardVisibleModules,
   emptyDashboardSnapshot,
-  type AuditActivity,
   type ContentHealthItem,
   type DashboardActivityPoint,
   type DashboardSnapshot,
@@ -33,7 +32,7 @@ const CONTENT_MODULES: readonly DashboardStatModule[] = [
   "blog",
 ];
 
-const SUPPORT_TABLES = ["audit_logs", "admin_users", "admin_login_events", "admin_sessions"];
+const SUPPORT_TABLES = ["admin_users", "admin_login_events", "admin_sessions"];
 const ALL_TABLE_NAMES = [
   ...new Set([...Object.values(TABLE_CANDIDATES).flat(), ...SUPPORT_TABLES]),
 ];
@@ -55,14 +54,6 @@ type InboxRow = RowDataPacket & {
   detail: string | null;
   createdAt: Date | string;
   unread: number | string;
-};
-type AuditRow = RowDataPacket & {
-  id: string | number;
-  module: string;
-  action: string;
-  summary: string | null;
-  actor: string | null;
-  createdAt: Date | string;
 };
 type LoginRow = RowDataPacket & { createdAt: Date | string; ipAddress: string | null };
 
@@ -316,27 +307,6 @@ async function latestInbox(
     .slice(0, 5);
 }
 
-async function recentAuditActivity(db: Pool, metadata: TableMetadata): Promise<AuditActivity[]> {
-  if (!metadata.has("audit_logs")) return [];
-  const hasUsers = metadata.has("admin_users");
-  const canJoin = hasUsers && hasColumn(metadata, "audit_logs", "admin_id");
-  const actor = canJoin && hasColumn(metadata, "admin_users", "name") ? "u.name" : "NULL";
-  const join = canJoin ? "LEFT JOIN `admin_users` u ON a.`admin_id` = u.`id`" : "";
-  const rows = await safeRows<AuditRow>(
-    db,
-    `SELECT a.id, a.module, a.action, a.summary, ${actor} AS actor, a.created_at AS createdAt
-      FROM \`audit_logs\` a ${join} ORDER BY a.created_at DESC LIMIT 10`,
-  );
-  return rows.map((row) => ({
-    id: String(row.id),
-    module: row.module,
-    action: row.action,
-    summary: row.summary || `${row.action} ${row.module}`,
-    actor: row.actor,
-    createdAt: toIso(row.createdAt) ?? new Date().toISOString(),
-  }));
-}
-
 async function systemStatus(db: Pool, metadata: TableMetadata, connected: boolean) {
   const sessions = metadata.has("admin_sessions")
     ? safeRows<CountRow>(
@@ -379,7 +349,7 @@ async function buildDashboardSnapshot(
   const leadCreatedAt = firstColumn(metadata, leadTable, ["created_at", "createdAt"]);
 
   // Once metadata is known, every independent dashboard read starts together.
-  const [statResults, messageActivity, leadActivity, loginActivity, inbox, recentActivity, system] =
+  const [statResults, messageActivity, leadActivity, loginActivity, inbox, system] =
     await Promise.all([
       Promise.all(visibleModules.map((module) => statForModule(db, metadata, module))),
       messageTable && messageCreatedAt
@@ -392,7 +362,6 @@ async function buildDashboardSnapshot(
         ? safeRows<ActivityRow>(db, activityQuery("admin_login_events", loginCreatedAt))
         : Promise.resolve([]),
       latestInbox(db, metadata, visibleModules),
-      recentAuditActivity(db, metadata),
       systemStatus(db, metadata, connected),
     ]);
 
@@ -401,10 +370,6 @@ async function buildDashboardSnapshot(
     contentHealth: statResults.flatMap((result) => (result.health ? [result.health] : [])),
     activity: mergeActivity(messageActivity, leadActivity, loginActivity),
     inbox,
-    recentActivity: recentActivity.filter(
-      (item) =>
-        item.module === "dashboard" || visibleModules.includes(item.module as DashboardStatModule),
-    ),
     system,
   };
 }

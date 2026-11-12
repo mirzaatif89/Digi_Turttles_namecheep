@@ -23,4 +23,23 @@ npm i
 npm run dev
 ```
 
+## Deploy to Namecheap cPanel
+
+This app uses server-side rendering and MySQL-backed admin features, so it needs a
+cPanel plan with the Node.js application feature; uploading only static files to
+`public_html` will not run the app.
+
+1. Use Node.js `^20.19.0` or `>=22.12.0`, then run `npm ci` and `npm run build`.
+2. Upload the **contents** of `.output` to the cPanel Node.js app root. Keep the
+   `server` and `public` folders together.
+3. In cPanel's Node.js app setup, choose `server/index.mjs` as the startup file,
+   attach the domain, and restart the app.
+4. Add these environment variables in cPanel (never commit their values):
+   `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `ADMIN_NAME`,
+   `ADMIN_EMAIL`, `ADMIN_PASSWORD`, and `NODE_ENV=production`.
+
+The database must be reachable from the hosting account. If the cPanel plan
+doesn't offer Node.js applications, this SSR app needs a Node.js host or VPS;
+static FTP hosting alone is not sufficient.
+
 # Digi_Turttles_namecheep
