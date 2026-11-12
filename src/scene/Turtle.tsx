@@ -48,7 +48,11 @@ export function Turtle() {
     return { shell, skin, flipper, belly, eye, shadowMat };
   }, []);
   const geo = useMemo(
-    () => ({ shell: shellGeometry(), sphere: new THREE.SphereGeometry(1, 24, 16), tail: new THREE.ConeGeometry(0.035, 0.12, 8) }),
+    () => ({
+      shell: shellGeometry(),
+      sphere: new THREE.SphereGeometry(1, 24, 16),
+      tail: new THREE.ConeGeometry(0.035, 0.12, 8),
+    }),
     [],
   );
 
@@ -83,7 +87,9 @@ export function Turtle() {
 
     // head: nods with the stride, curiously follows the pointer
     neck.current.rotation.y = scrollState.pointerX * -0.35 + Math.sin(t * 0.7) * 0.08;
-    neck.current.rotation.z = lerp(0.12 + Math.sin(cp * 2) * 0.06, 0.05 + Math.sin(sp) * 0.04, w) + scrollState.pointerY * 0.1;
+    neck.current.rotation.z =
+      lerp(0.12 + Math.sin(cp * 2) * 0.06, 0.05 + Math.sin(sp) * 0.04, w) +
+      scrollState.pointerY * 0.1;
 
     for (const f of flippers.current) {
       const ph = f.front ? cp + (f.side < 0 ? 0 : Math.PI) : cp + (f.side < 0 ? Math.PI : 0);
@@ -110,7 +116,8 @@ export function Turtle() {
       shadow.current.position.set(s.turtle.x, gy + 0.02, s.turtle.z);
       shadow.current.rotation.set(-Math.PI / 2, 0, -s.yaw);
       shadow.current.scale.set(1.15 * s.scale, 0.85 * s.scale, 1);
-      (shadow.current.material as THREE.MeshBasicMaterial).opacity = Math.max(0, 1 - h * 2.2) * (s.p > 0.2 ? 1 : 0);
+      (shadow.current.material as THREE.MeshBasicMaterial).opacity =
+        Math.max(0, 1 - h * 2.2) * (s.p > 0.2 ? 1 : 0);
     }
   });
 
@@ -119,17 +126,53 @@ export function Turtle() {
       <group ref={root}>
         <group ref={body}>
           {/* carapace + plastron */}
-          <mesh geometry={geo.shell} material={mats.shell} position={[0, 0.03, 0]} scale={[0.45, 0.17, 0.36]} castShadow />
-          <mesh geometry={geo.sphere} material={mats.belly} position={[0, -0.02, 0]} scale={[0.42, 0.06, 0.33]} />
-          <mesh geometry={geo.tail} material={mats.skin} position={[-0.46, -0.01, 0]} rotation={[0, 0, Math.PI / 2]} />
+          <mesh
+            geometry={geo.shell}
+            material={mats.shell}
+            position={[0, 0.03, 0]}
+            scale={[0.45, 0.17, 0.36]}
+            castShadow
+          />
+          <mesh
+            geometry={geo.sphere}
+            material={mats.belly}
+            position={[0, -0.02, 0]}
+            scale={[0.42, 0.06, 0.33]}
+          />
+          <mesh
+            geometry={geo.tail}
+            material={mats.skin}
+            position={[-0.46, -0.01, 0]}
+            rotation={[0, 0, Math.PI / 2]}
+          />
           {/* head */}
           <group ref={neck} position={[0.36, 0.02, 0]}>
-            <mesh geometry={geo.sphere} material={mats.skin} position={[0.04, 0, 0]} scale={[0.1, 0.075, 0.085]} />
-            <mesh geometry={geo.sphere} material={mats.skin} position={[0.13, 0.01, 0]} scale={[0.12, 0.09, 0.1]} />
-            <mesh geometry={geo.sphere} material={mats.skin} position={[0.23, -0.005, 0]} scale={[0.06, 0.055, 0.065]} />
+            <mesh
+              geometry={geo.sphere}
+              material={mats.skin}
+              position={[0.04, 0, 0]}
+              scale={[0.1, 0.075, 0.085]}
+            />
+            <mesh
+              geometry={geo.sphere}
+              material={mats.skin}
+              position={[0.13, 0.01, 0]}
+              scale={[0.12, 0.09, 0.1]}
+            />
+            <mesh
+              geometry={geo.sphere}
+              material={mats.skin}
+              position={[0.23, -0.005, 0]}
+              scale={[0.06, 0.055, 0.065]}
+            />
             {[-1, 1].map((s) => (
               <group key={s}>
-                <mesh geometry={geo.sphere} material={mats.eye} position={[0.18, 0.045, 0.07 * s]} scale={0.026} />
+                <mesh
+                  geometry={geo.sphere}
+                  material={mats.eye}
+                  position={[0.18, 0.045, 0.07 * s]}
+                  scale={0.026}
+                />
               </group>
             ))}
           </group>

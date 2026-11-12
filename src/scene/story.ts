@@ -43,9 +43,13 @@ const easeInOut = (t: number) => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2,
 export function groundHeight(x: number, z: number): number {
   const u = x - z * 0.3;
   const base = 0.6 - 5.6 * smoothstep(5, 16, u);
-  const dunes = (Math.sin(x * 0.7) * 0.12 + Math.sin(z * 1.1 + x * 0.3) * 0.08) * (1 - smoothstep(3, 7, u));
-  const hills = smoothstep(-6, -16, z) * 1.8 * (1 - smoothstep(0, 6, u)) * (0.6 + 0.4 * Math.sin(x * 0.3));
-  const bed = (Math.sin(x * 0.4 + z * 0.3) * 0.35 + Math.sin(z * 0.7 - x * 0.2) * 0.25) * smoothstep(12, 20, u);
+  const dunes =
+    (Math.sin(x * 0.7) * 0.12 + Math.sin(z * 1.1 + x * 0.3) * 0.08) * (1 - smoothstep(3, 7, u));
+  const hills =
+    smoothstep(-6, -16, z) * 1.8 * (1 - smoothstep(0, 6, u)) * (0.6 + 0.4 * Math.sin(x * 0.3));
+  const bed =
+    (Math.sin(x * 0.4 + z * 0.3) * 0.35 + Math.sin(z * 0.7 - x * 0.2) * 0.25) *
+    smoothstep(12, 20, u);
   return base + dunes + hills + bed;
 }
 
@@ -104,8 +108,11 @@ export function storyAt(p: number, t: number, lateral = 1): Story {
   const crack = remap(p, STAGE.idleEnd, STAGE.crackEnd);
   const shellOpen = easeInOut(remap(p, STAGE.crackEnd, STAGE.breakEnd));
   const idleBurst = Math.pow(Math.max(0, Math.sin(t * 1.7)), 6) * 0.35;
-  const crackBurst = (0.4 + 0.6 * Math.pow(Math.max(0, Math.sin(t * 3.1)), 2)) * (crack > 0 && shellOpen < 1 ? 1 : 0);
-  const eggWobble = Math.max(idleBurst * (1 - crack), crackBurst * (0.4 + crack * 0.6)) * (1 - shellOpen * 0.8);
+  const crackBurst =
+    (0.4 + 0.6 * Math.pow(Math.max(0, Math.sin(t * 3.1)), 2)) *
+    (crack > 0 && shellOpen < 1 ? 1 : 0);
+  const eggWobble =
+    Math.max(idleBurst * (1 - crack), crackBurst * (0.4 + crack * 0.6)) * (1 - shellOpen * 0.8);
   const eggTilt = -0.32 * smoothstep(0.17, 0.215, p);
 
   // --- Turtle ---
@@ -178,8 +185,14 @@ export function storyAt(p: number, t: number, lateral = 1): Story {
   // --- Camera ---
   const L = lateral;
   const eg = EGG_GROUND;
-  const hero = { pos: { x: EGG_X - 2.3 * L, y: eg + 1.7, z: 6.6 }, target: { x: EGG_X - 2.2 * L, y: eg + 0.75, z: 0 } };
-  const close = { pos: { x: EGG_X - 1.2 * L, y: eg + 1.35, z: 4.4 }, target: { x: EGG_X - 0.85 * L, y: eg + 0.62, z: EGG_Z } };
+  const hero = {
+    pos: { x: EGG_X - 2.3 * L, y: eg + 1.7, z: 6.6 },
+    target: { x: EGG_X - 2.2 * L, y: eg + 0.75, z: 0 },
+  };
+  const close = {
+    pos: { x: EGG_X - 1.2 * L, y: eg + 1.35, z: 4.4 },
+    target: { x: EGG_X - 0.85 * L, y: eg + 0.62, z: EGG_Z },
+  };
   const above = {
     pos: { x: x - 1.5 * L, y: Math.max(y, 0) + 1.45, z: z + 5.2 },
     target: { x: x - 1.25 * L, y: y + 0.3, z },
@@ -189,7 +202,10 @@ export function storyAt(p: number, t: number, lateral = 1): Story {
     target: { x: x - 1.45 * L, y: y + 0.05, z },
   };
   const uwCam = smoothstep(0.49, 0.565, p);
-  const follow = { pos: mix3(above.pos, under.pos, uwCam), target: mix3(above.target, under.target, uwCam) };
+  const follow = {
+    pos: mix3(above.pos, under.pos, uwCam),
+    target: mix3(above.target, under.target, uwCam),
+  };
   let camPos = mix3(hero.pos, close.pos, smoothstep(0.015, 0.09, p));
   let camTarget = mix3(hero.target, close.target, smoothstep(0.015, 0.09, p));
   const f = smoothstep(0.17, 0.27, p);

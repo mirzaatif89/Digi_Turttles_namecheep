@@ -38,7 +38,12 @@ export function makeShellTexture() {
       const x0 = -0.58 + k * 0.29;
       const x1 = x0 + 0.29;
       poly(
-        [P(x0, 0.15 * side), P(x1, 0.15 * side), P(x1 * 0.86, 0.68 * side), P(x0 * 0.86, 0.68 * side)],
+        [
+          P(x0, 0.15 * side),
+          P(x1, 0.15 * side),
+          P(x1 * 0.86, 0.68 * side),
+          P(x0 * 0.86, 0.68 * side),
+        ],
         k % 2 ? "#4b6357" : "#435a50",
       );
     }
@@ -49,7 +54,14 @@ export function makeShellTexture() {
     const w = 0.15;
     const h = i === 0 || i === 4 ? 0.13 : 0.16;
     poly(
-      [P(x - w, 0), P(x - w * 0.55, -h), P(x + w * 0.55, -h), P(x + w, 0), P(x + w * 0.55, h), P(x - w * 0.55, h)],
+      [
+        P(x - w, 0),
+        P(x - w * 0.55, -h),
+        P(x + w * 0.55, -h),
+        P(x + w, 0),
+        P(x + w * 0.55, h),
+        P(x - w * 0.55, h),
+      ],
       "#557063",
     );
   });

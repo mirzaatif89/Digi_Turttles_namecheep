@@ -1,5 +1,14 @@
 import { describe, expect, it } from "vitest";
-import { ANCHOR, EGG_X, STAGE, WALK_END_X, groundHeight, mapScroll, normalizeAnchors, storyAt } from "./story";
+import {
+  ANCHOR,
+  EGG_X,
+  STAGE,
+  WALK_END_X,
+  groundHeight,
+  mapScroll,
+  normalizeAnchors,
+  storyAt,
+} from "./story";
 
 describe("turtle story timeline", () => {
   it("keeps the egg whole and the turtle hidden before scrolling", () => {
@@ -39,7 +48,9 @@ describe("turtle story timeline", () => {
   });
 
   it("orders chapters egg → hatch → crawl → dive → ocean", () => {
-    expect([0, ANCHOR.hatch, ANCHOR.walk, ANCHOR.dive, 0.9].map((p) => storyAt(p, 0).chapter)).toEqual([0, 1, 2, 3, 4]);
+    expect(
+      [0, ANCHOR.hatch, ANCHOR.walk, ANCHOR.dive, 0.9].map((p) => storyAt(p, 0).chapter),
+    ).toEqual([0, 1, 2, 3, 4]);
   });
 });
 

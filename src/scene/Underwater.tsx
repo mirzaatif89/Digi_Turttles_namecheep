@@ -29,14 +29,25 @@ function GodRays() {
       }),
     [],
   );
-  const rays = useMemo(() => Array.from({ length: 12 }, (_, i) => ({ x: 9 + i * 3 + rand(i) * 2, z: -5 + rand(i + 9) * 5, w: 1.2 + rand(i + 3) * 2.2 })), []);
+  const rays = useMemo(
+    () =>
+      Array.from({ length: 12 }, (_, i) => ({
+        x: 9 + i * 3 + rand(i) * 2,
+        z: -5 + rand(i + 9) * 5,
+        w: 1.2 + rand(i + 3) * 2.2,
+      })),
+    [],
+  );
   useFrame(({ camera, clock }) => {
     mat.uniforms["uOpacity"]!.value = live.uw * 0.22;
     mat.uniforms["uTime"]!.value = clock.elapsedTime;
     if (group.current) {
       group.current.visible = live.uw > 0.01;
       group.current.children.forEach((c) => {
-        c.rotation.y = Math.atan2(camera.position.x - c.position.x, camera.position.z - c.position.z);
+        c.rotation.y = Math.atan2(
+          camera.position.x - c.position.x,
+          camera.position.z - c.position.z,
+        );
       });
     }
   });
@@ -58,7 +69,8 @@ function Particles() {
   const geo = useMemo(() => {
     const n = 900;
     const p = new Float32Array(n * 3);
-    for (let i = 0; i < n; i++) p.set([6 + rand(i) * 48, -5.5 + rand(i + 1000) * 5.3, -9 + rand(i + 2000) * 13], i * 3);
+    for (let i = 0; i < n; i++)
+      p.set([6 + rand(i) * 48, -5.5 + rand(i + 1000) * 5.3, -9 + rand(i + 2000) * 13], i * 3);
     const g = new THREE.BufferGeometry();
     g.setAttribute("position", new THREE.BufferAttribute(p, 3));
     return g;
@@ -72,7 +84,16 @@ function Particles() {
   });
   return (
     <points ref={ref} geometry={geo}>
-      <pointsMaterial map={dot} alphaTest={0.01} size={0.06} color="#a8fbff" transparent depthWrite={false} sizeAttenuation blending={THREE.AdditiveBlending} />
+      <pointsMaterial
+        map={dot}
+        alphaTest={0.01}
+        size={0.06}
+        color="#a8fbff"
+        transparent
+        depthWrite={false}
+        sizeAttenuation
+        blending={THREE.AdditiveBlending}
+      />
     </points>
   );
 }
@@ -160,7 +181,11 @@ function Fish() {
       const r = 3 + rand(i + 5) * 1.2;
       const cx = 27;
       const cz = -3.5;
-      d.position.set(cx + Math.cos(a) * r, -2.4 + Math.sin(a * 2 + i) * 0.4 + rand(i + 8) * 0.8, cz + Math.sin(a) * r * 0.6);
+      d.position.set(
+        cx + Math.cos(a) * r,
+        -2.4 + Math.sin(a * 2 + i) * 0.4 + rand(i + 8) * 0.8,
+        cz + Math.sin(a) * r * 0.6,
+      );
       d.rotation.set(0, -a - Math.PI / 2, Math.sin(clock.elapsedTime * 8 + i) * 0.15);
       d.updateMatrix();
       m.setMatrixAt(i, d.matrix);
@@ -169,7 +194,13 @@ function Fish() {
   });
   return (
     <instancedMesh ref={ref} args={[geo, undefined, N]} frustumCulled={false}>
-      <meshStandardMaterial color="#8fe6ea" emissive="#1c6f78" emissiveIntensity={0.6} roughness={0.3} metalness={0.4} />
+      <meshStandardMaterial
+        color="#8fe6ea"
+        emissive="#1c6f78"
+        emissiveIntensity={0.6}
+        roughness={0.3}
+        metalness={0.4}
+      />
     </instancedMesh>
   );
 }
@@ -187,7 +218,11 @@ function Bubbles() {
       group.current.visible = under;
       group.current.children.forEach((c, i) => {
         const k = (t * 0.45 + rand(i)) % 1;
-        c.position.set(s.turtle.x + 0.35 - k * 0.6 + Math.sin(t * 3 + i) * 0.05, s.turtle.y + 0.15 + k * 2.4, s.turtle.z + (rand(i + 3) - 0.5) * 0.3);
+        c.position.set(
+          s.turtle.x + 0.35 - k * 0.6 + Math.sin(t * 3 + i) * 0.05,
+          s.turtle.y + 0.15 + k * 2.4,
+          s.turtle.z + (rand(i + 3) - 0.5) * 0.3,
+        );
         c.scale.setScalar(0.02 + rand(i + 7) * 0.035 + k * 0.02);
       });
     }
@@ -198,7 +233,8 @@ function Bubbles() {
       ripples.current.children.forEach((c, i) => {
         const k = Math.max(0, sp * 1.4 - i * 0.2);
         c.scale.setScalar(0.2 + k * 2.4);
-        ((c as THREE.Mesh).material as THREE.MeshBasicMaterial).opacity = Math.max(0, 0.7 * (1 - k)) * (k > 0 ? 1 : 0);
+        ((c as THREE.Mesh).material as THREE.MeshBasicMaterial).opacity =
+          Math.max(0, 0.7 * (1 - k)) * (k > 0 ? 1 : 0);
       });
     }
   });
@@ -208,7 +244,15 @@ function Bubbles() {
         {Array.from({ length: N }, (_, i) => (
           <mesh key={i}>
             <sphereGeometry args={[1, 10, 8]} />
-            <meshPhysicalMaterial color="#d8ffff" transparent opacity={0.45} roughness={0} transmission={0} emissive="#3fbcc4" emissiveIntensity={0.4} />
+            <meshPhysicalMaterial
+              color="#d8ffff"
+              transparent
+              opacity={0.45}
+              roughness={0}
+              transmission={0}
+              emissive="#3fbcc4"
+              emissiveIntensity={0.4}
+            />
           </mesh>
         ))}
       </group>

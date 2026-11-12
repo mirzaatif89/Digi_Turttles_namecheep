@@ -42,13 +42,20 @@ export function Terrain() {
     }
     g.setAttribute("color", new THREE.BufferAttribute(colors, 3));
     g.computeVertexNormals();
-    const m = new THREE.MeshStandardMaterial({ map: makeSandTexture(), vertexColors: true, roughness: 0.95 });
+    const m = new THREE.MeshStandardMaterial({
+      map: makeSandTexture(),
+      vertexColors: true,
+      roughness: 0.95,
+    });
     m.onBeforeCompile = (sh) => {
       sh.uniforms["uTime"] = { value: 0 };
       shader.current = sh;
       sh.vertexShader = sh.vertexShader
         .replace("#include <common>", "#include <common>\nvarying vec3 vWPos;")
-        .replace("#include <begin_vertex>", "#include <begin_vertex>\nvWPos = (modelMatrix * vec4(transformed,1.0)).xyz;");
+        .replace(
+          "#include <begin_vertex>",
+          "#include <begin_vertex>\nvWPos = (modelMatrix * vec4(transformed,1.0)).xyz;",
+        );
       sh.fragmentShader = sh.fragmentShader
         .replace(
           "#include <common>",
@@ -167,7 +174,12 @@ export function Water() {
     mat.uniforms["uTime"]!.value = s.clock.elapsedTime;
   });
   return (
-    <mesh material={mat} position={[60, 0, -40]} rotation={[-Math.PI / 2, 0, 0]} frustumCulled={false}>
+    <mesh
+      material={mat}
+      position={[60, 0, -40]}
+      rotation={[-Math.PI / 2, 0, 0]}
+      frustumCulled={false}
+    >
       <planeGeometry args={[240, 200, 200, 160]} />
     </mesh>
   );
@@ -182,7 +194,11 @@ export function Sky() {
         side: THREE.BackSide,
         depthWrite: false,
         fog: false,
-        uniforms: { uTop: { value: new THREE.Color("#030b17") }, uHorizon: { value: new THREE.Color("#0f4256") }, uMoon: { value: MOON_DIR } },
+        uniforms: {
+          uTop: { value: new THREE.Color("#030b17") },
+          uHorizon: { value: new THREE.Color("#0f4256") },
+          uMoon: { value: MOON_DIR },
+        },
         vertexShader: `varying vec3 vD; void main(){ vD = normalize(position); gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.); }`,
         fragmentShader: `uniform vec3 uTop, uHorizon, uMoon; varying vec3 vD;
           void main(){ float h = clamp(vD.y, 0., 1.); vec3 c = mix(uHorizon, uTop, pow(h, 0.45));
@@ -211,7 +227,13 @@ export function Sky() {
         <meshBasicMaterial color="#eafcff" fog={false} toneMapped={false} />
       </mesh>
       <sprite position={moonPos} scale={[70, 70, 1]}>
-        <spriteMaterial map={glow} transparent depthWrite={false} fog={false} blending={THREE.AdditiveBlending} />
+        <spriteMaterial
+          map={glow}
+          transparent
+          depthWrite={false}
+          fog={false}
+          blending={THREE.AdditiveBlending}
+        />
       </sprite>
     </group>
   );
@@ -270,12 +292,29 @@ export function Beach() {
         <meshBasicMaterial color="#5e5443" transparent opacity={0.55} depthWrite={false} />
       </instancedMesh>
       {rocks.map((r, i) => (
-        <mesh key={i} position={[r.x, r.y + r.s * 0.2, r.z]} scale={[r.s, r.s * 0.6, r.s * 0.8]} rotation={[i, i * 2, 0]}>
+        <mesh
+          key={i}
+          position={[r.x, r.y + r.s * 0.2, r.z]}
+          scale={[r.s, r.s * 0.6, r.s * 0.8]}
+          rotation={[i, i * 2, 0]}
+        >
           <dodecahedronGeometry args={[1, 0]} />
-          <meshStandardMaterial color={r.y < 0 ? "#2e4a4f" : "#5b5a55"} roughness={0.9} flatShading />
+          <meshStandardMaterial
+            color={r.y < 0 ? "#2e4a4f" : "#5b5a55"}
+            roughness={0.9}
+            flatShading
+          />
         </mesh>
       ))}
-      <Sparkles count={70} scale={[3, 0.4, 14]} position={[7.4, 0.15, -2]} color="#6ff3f0" size={4} speed={0.35} opacity={0.9} />
+      <Sparkles
+        count={70}
+        scale={[3, 0.4, 14]}
+        position={[7.4, 0.15, -2]}
+        color="#6ff3f0"
+        size={4}
+        speed={0.35}
+        opacity={0.9}
+      />
     </>
   );
 }
