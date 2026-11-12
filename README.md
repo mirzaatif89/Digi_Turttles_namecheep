@@ -42,7 +42,8 @@ app. The wrapper starts `.output/server/index.mjs` after each server build.
 
 Run `npm ci` and `npm run build` before uploading. Upload the **contents** of
 `.output` to the app root, keeping the `server` and `public` folders together.
-Use `server/index.mjs` as the startup file, then restart the app.
+Do not overwrite the root `package.json` or `package-lock.json` with the small
+files from `.output`. Use `app.js` as the startup file, then restart the app.
 
 For either layout, add these environment variables in cPanel (never commit their values):
 `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `ADMIN_NAME`,

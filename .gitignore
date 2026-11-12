@@ -14,6 +14,11 @@ dist-ssr
 .tanstack/**
 .nitro
 .output/
+# Prebuilt output that may be uploaded directly to the cPanel app root.
+/server/
+/public/assets/
+/public/_headers
+/nitro.json
 *.local
 
 # Wrangler / Cloudflare
