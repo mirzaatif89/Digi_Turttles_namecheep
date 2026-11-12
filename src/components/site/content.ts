@@ -1,10 +1,10 @@
 import classroom from "@/assets/classroom.jpg";
 import analytics from "@/assets/project-analytics.jpg";
 import branding from "@/assets/project-branding.jpg";
-import ahmed from "@/assets/team-ahmed.jpg";
-import ayesha from "@/assets/team-ayesha.jpg";
-import bilal from "@/assets/team-bilal.jpg";
-import sana from "@/assets/team-sana.jpg";
+import adil from "@/assets/team-adil-syed.jpeg";
+import hamza from "@/assets/team-hamza.jpeg";
+import zeeshan from "@/assets/team-syed-zeeshan-ali.jpeg";
+import atif from "@/assets/team-atif-mehmood.jpeg";
 
 export const NAV = [
   { label: "Home", href: "#home" },
@@ -76,28 +76,28 @@ export const PROJECTS = [
 
 export const TEAM = [
   {
-    name: "Ahmed Raza",
+    name: "Adil Syed",
     role: "Founder & CEO",
-    bio: "Started Digi Turtles to turn beginners into independent professionals.",
-    img: ahmed,
+    bio: "Leads Digi Turtles with a vision for practical growth and lasting impact.",
+    img: adil,
   },
   {
-    name: "Ayesha Khan",
-    role: "Head of Institute",
-    bio: "Designs the Learn → Practice → Build learning paths.",
-    img: ayesha,
+    name: "Hamza",
+    role: "Co-Founder & Technical Director",
+    bio: "Directs the technical strategy and builds reliable digital experiences.",
+    img: hamza,
   },
   {
-    name: "Bilal Hussain",
-    role: "AI Automation Lead",
-    bio: "Builds AI workflows that save businesses hours every week.",
-    img: bilal,
+    name: "Syed Zeeshan Ali",
+    role: "Co-Founder & Creative Director",
+    bio: "Shapes the creative vision and visual direction behind Digi Turtles.",
+    img: zeeshan,
   },
   {
-    name: "Sana Malik",
-    role: "Digital Marketing Strategist",
-    bio: "Plans campaigns that turn attention into leads.",
-    img: sana,
+    name: "Atif Mehmood",
+    role: "Senior Developer",
+    bio: "Builds high-quality digital products and dependable web experiences.",
+    img: atif,
   },
 ];
 
