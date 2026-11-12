@@ -1,0 +1,1 @@
+var e=`/assets/logo-Otu0z1kd.png`;export{e as t};

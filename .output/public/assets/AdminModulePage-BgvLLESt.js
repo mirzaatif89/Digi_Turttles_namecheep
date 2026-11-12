@@ -1,0 +1,1 @@
+import{n as e}from"./with-selector-B0MYrySg.js";import{A as t,M as n,j as r}from"./index-gBwqNe2L.js";var i=e();function a({title:e,allowed:a}){return a?(0,i.jsxs)(i.Fragment,{children:[(0,i.jsx)(t,{title:e,description:`Module workspace`}),(0,i.jsx)(n,{title:e})]}):(0,i.jsx)(r,{})}export{a as t};

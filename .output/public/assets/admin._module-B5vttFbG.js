@@ -1,0 +1,1 @@
+import{n as e}from"./with-selector-B0MYrySg.js";import{D as t,E as n}from"./index-gBwqNe2L.js";import{t as r}from"./AdminModulePage-BgvLLESt.js";import{t as i}from"./admin-navigation-D19npLh_.js";var a=e();function o(){let e=n.useLoaderData(),o=n.useParams().module;return t(o)?(0,a.jsx)(r,{title:i(o),allowed:e.allowed}):null}export{o as component};

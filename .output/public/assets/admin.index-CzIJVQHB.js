@@ -1,0 +1,1 @@
+import{n as e}from"./with-selector-B0MYrySg.js";import{O as t,k as n}from"./index-gBwqNe2L.js";var r=e();function i(){return(0,r.jsx)(n,{data:t.useLoaderData()})}export{i as component};

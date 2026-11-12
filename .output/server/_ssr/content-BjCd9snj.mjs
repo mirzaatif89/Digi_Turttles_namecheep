@@ -1,0 +1,239 @@
+//#region node_modules/.nitro/vite/services/ssr/assets/content-BjCd9snj.js
+var classroom_default = "/assets/classroom-kmSK9-NP.jpg";
+var project_analytics_default = "/assets/project-analytics-BlPd5P6j.jpg";
+var project_branding_default = "/assets/project-branding-C0sC76tA.jpg";
+var team_ahmed_default = "/assets/team-ahmed-Dh_UGd6r.jpg";
+var team_ayesha_default = "/assets/team-ayesha-RzzDhTyE.jpg";
+var team_bilal_default = "/assets/team-bilal-C9vE40dO.jpg";
+var team_sana_default = "/assets/team-sana-B8IYKDg8.jpg";
+var NAV = [
+	{
+		label: "Home",
+		href: "#home"
+	},
+	{
+		label: "About",
+		href: "#about"
+	},
+	{
+		label: "Services",
+		href: "#services"
+	},
+	{
+		label: "Portfolio",
+		href: "#portfolio"
+	},
+	{
+		label: "Team",
+		href: "#team"
+	},
+	{
+		label: "Blog",
+		href: "#blog"
+	},
+	{
+		label: "Contact Us",
+		href: "#contact"
+	}
+];
+var COURSES = [
+	"AI Automation",
+	"Digital Marketing",
+	"Finance & Budgeting",
+	"Graphic Designing",
+	"SEO",
+	"Photography & Videography",
+	"Video Editing",
+	"Acting"
+];
+var SERVICES = [
+	{
+		title: "Lead Generation",
+		text: "Finding and developing qualified business opportunities through targeted digital systems.",
+		icon: "Target"
+	},
+	{
+		title: "Digital Marketing",
+		text: "Strategy, campaigns, social media, content and digital growth execution.",
+		icon: "Megaphone"
+	},
+	{
+		title: "AI Automation",
+		text: "Automating repetitive workflows, customer processes and business operations with AI.",
+		icon: "Bot"
+	},
+	{
+		title: "SEO",
+		text: "Improving organic visibility, search performance and long-term discoverability.",
+		icon: "Search"
+	},
+	{
+		title: "Brand Building",
+		text: "Positioning, identity, content direction and digital presence designed for growth.",
+		icon: "Gem"
+	},
+	{
+		title: "Training for Teams",
+		text: "Practical workshops from our Institute so your own team becomes independent.",
+		icon: "GraduationCap"
+	}
+];
+var PHILOSOPHY = [
+	{
+		title: "Start Small",
+		text: "Every expert begins as a beginner."
+	},
+	{
+		title: "Keep Moving",
+		text: "Small steps compound over time."
+	},
+	{
+		title: "Learn by Doing",
+		text: "Knowledge matters when applied."
+	},
+	{
+		title: "Build Independence",
+		text: "No permanent dependence."
+	},
+	{
+		title: "Help Others Grow",
+		text: "Skilled turtles lift the next."
+	}
+];
+var PROJECTS = [
+	{
+		title: "Retail Brand Refresh",
+		tag: "Brand Building",
+		img: project_branding_default
+	},
+	{
+		title: "Lead Engine for a Clinic",
+		tag: "Lead Generation",
+		img: project_analytics_default
+	},
+	{
+		title: "Student Showcase Cohort",
+		tag: "Institute",
+		img: classroom_default
+	}
+];
+var TEAM = [
+	{
+		name: "Ahmed Raza",
+		role: "Founder & CEO",
+		bio: "Started Digi Turtles to turn beginners into independent professionals.",
+		img: team_ahmed_default
+	},
+	{
+		name: "Ayesha Khan",
+		role: "Head of Institute",
+		bio: "Designs the Learn → Practice → Build learning paths.",
+		img: team_ayesha_default
+	},
+	{
+		name: "Bilal Hussain",
+		role: "AI Automation Lead",
+		bio: "Builds AI workflows that save businesses hours every week.",
+		img: team_bilal_default
+	},
+	{
+		name: "Sana Malik",
+		role: "Digital Marketing Strategist",
+		bio: "Plans campaigns that turn attention into leads.",
+		img: team_sana_default
+	}
+];
+var POSTS = [
+	{
+		title: "Why We Chose the Turtle",
+		meta: "Our Story · Nov 2, 2026",
+		text: "Not because it is the fastest — because it keeps moving.",
+		img: classroom_default
+	},
+	{
+		title: "AI Automation for Small Businesses",
+		meta: "AI · Oct 24, 2026",
+		text: "Where to start automating without a big tech team.",
+		img: project_analytics_default
+	},
+	{
+		title: "Learn → Practice → Build → Showcase",
+		meta: "Institute · Oct 12, 2026",
+		text: "How our teaching model turns knowledge into income.",
+		img: classroom_default
+	}
+];
+var PARTNERS = [
+	"NEXORA",
+	"Urban Nest",
+	"Kite & Co.",
+	"VELORA",
+	"Northstar",
+	"Olive Studio",
+	"Peakline",
+	"Mosaic"
+];
+var REVIEWS = [
+	{
+		quote: "Digi Turtles turned a scattered marketing effort into a clear lead-generation system our team can actually run.",
+		name: "Areeba Shah",
+		role: "Co-founder, Northstar Clinics"
+	},
+	{
+		quote: "The team understood our brand quickly, then gave us a visual system that made every campaign feel connected.",
+		name: "Hamza Malik",
+		role: "Director, Urban Nest"
+	},
+	{
+		quote: "Our AI assistant now handles routine questions around the clock, while our people focus on real conversations.",
+		name: "Sana Rehman",
+		role: "Operations Lead, Kite & Co."
+	},
+	{
+		quote: "The SEO roadmap was practical, clearly explained and built around the searches our customers were already making.",
+		name: "Fahad Ali",
+		role: "Founder, Peakline Commerce"
+	},
+	{
+		quote: "We appreciated the balance of strategy and execution. Every deliverable had a purpose and a next step.",
+		name: "Maha Khan",
+		role: "Marketing Manager, Velora"
+	},
+	{
+		quote: "The training gave our in-house team the confidence to create better content and keep improving after the workshop.",
+		name: "Usman Ahmed",
+		role: "People Lead, Mosaic Group"
+	}
+];
+var FAQS = [
+	{
+		q: "Which services can Digi Turtles help my business with?",
+		a: "Lead generation, digital marketing, AI automation, SEO, brand building and hands-on training for your team."
+	},
+	{
+		q: "How do you price a project?",
+		a: "Every project is scoped around your goals. After a short discovery call we share a clear, fixed proposal."
+	},
+	{
+		q: "How long does a typical project take?",
+		a: "Most projects run between two and eight weeks, depending on scope. We agree on milestones up front."
+	},
+	{
+		q: "Are revisions included?",
+		a: "Yes. Each deliverable includes review rounds so the final result fits your brand and goals."
+	},
+	{
+		q: "Do you provide support after launch?",
+		a: "We offer ongoing support and growth plans, so your systems keep improving after launch."
+	},
+	{
+		q: "Can you train our internal team?",
+		a: "Absolutely. Our Institute runs practical workshops so your team becomes independent."
+	},
+	{
+		q: "How do we get started?",
+		a: "Send us a message through the contact section and we will schedule a free discovery call."
+	}
+];
+//#endregion
+export { PHILOSOPHY as a, REVIEWS as c, classroom_default as d, PARTNERS as i, SERVICES as l, FAQS as n, POSTS as o, NAV as r, PROJECTS as s, COURSES as t, TEAM as u };
