@@ -1,1 +1,0 @@
-import{t as e}from"./jsx-runtime-CXCudH8Z.js";import{t}from"./index-BTZU8BAZ.js";import{t as n}from"./RoutedModulePage-Y5RQwmCj.js";var r=e();function i(){return(0,r.jsx)(n,{module:`users`,allowed:t.useLoaderData().allowed})}export{i as component};

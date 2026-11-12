@@ -1,0 +1,6 @@
+---
+# The checked-out repository is also this account's Node.js app root. cPanel's
+# Git deployment only needs a valid task; the source is already in place.
+deployment:
+  tasks:
+    - /bin/true

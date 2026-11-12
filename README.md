@@ -29,12 +29,22 @@ This app uses server-side rendering and MySQL-backed admin features, so it needs
 cPanel plan with the Node.js application feature; uploading only static files to
 `public_html` will not run the app.
 
-1. Use Node.js `^20.19.0` or `>=22.12.0`, then run `npm ci` and `npm run build`.
-2. Upload the **contents** of `.output` to the cPanel Node.js app root. Keep the
-   `server` and `public` folders together.
-3. In cPanel's Node.js app setup, choose `server/index.mjs` as the startup file,
-   attach the domain, and restart the app.
-4. Add these environment variables in cPanel (never commit their values):
+Use Node.js `^20.19.0` or `>=22.12.0` and choose one deployment layout:
+
+### Git checkout is the Node.js app root
+
+This is the current `digiturtles.com` layout. After pulling the repository on
+the server, run `npm ci` and `npm run build` in the app root. In cPanel's Node.js
+app setup, use `.output/server/index.mjs` as the startup file, attach the domain,
+and restart the app.
+
+### Prebuilt output is uploaded to the Node.js app root
+
+Run `npm ci` and `npm run build` before uploading. Upload the **contents** of
+`.output` to the app root, keeping the `server` and `public` folders together.
+Use `server/index.mjs` as the startup file, then restart the app.
+
+For either layout, add these environment variables in cPanel (never commit their values):
    `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `ADMIN_NAME`,
    `ADMIN_EMAIL`, `ADMIN_PASSWORD`, and `NODE_ENV=production`.
 

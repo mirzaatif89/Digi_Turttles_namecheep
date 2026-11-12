@@ -1,1 +1,0 @@
-import{t as e}from"./jsx-runtime-CXCudH8Z.js";import{D as t,E as n}from"./index-BTZU8BAZ.js";import{t as r}from"./AdminModulePage-CP9Nf0UT.js";import{t as i}from"./admin-navigation-D19npLh_.js";var a=e();function o(){let e=n.useLoaderData(),o=n.useParams().module;return t(o)?(0,a.jsx)(r,{title:i(o),allowed:e.allowed}):null}export{o as component};
