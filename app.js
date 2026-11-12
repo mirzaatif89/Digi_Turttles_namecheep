@@ -4,5 +4,11 @@ import { existsSync } from "node:fs";
 // `.output` and the contents of that build uploaded directly to the app root.
 const sourceBuild = new URL("./.output/server/index.mjs", import.meta.url);
 const uploadedBuild = new URL("./server/index.mjs", import.meta.url);
+const entry = existsSync(sourceBuild) ? sourceBuild : uploadedBuild;
 
-await import((existsSync(sourceBuild) ? sourceBuild : uploadedBuild).href);
+// Passenger loads this file through CommonJS `require()`. Do not use top-level
+// await here: Node then rejects the entry before Nitro gets a chance to listen.
+void import(entry.href).catch((error) => {
+  console.error("Unable to start the generated Nitro server.", error);
+  process.exitCode = 1;
+});
