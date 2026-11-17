@@ -15,10 +15,10 @@ import {
 } from "./permissions";
 import type { AdminSession } from "./auth.types";
 import {
-  createFirstSuperAdmin,
-  countAdmins,
+  ensureEnvironmentSuperAdmin,
   findActiveAdminById,
   findAdminByEmail,
+  needsEnvironmentAdminPasswordSync,
   updateLastLogin,
   type AdminUserRow,
 } from "./repos/admins.server";
@@ -79,27 +79,29 @@ function toSession(user: AdminUserRow): AdminSession | null {
   };
 }
 
-async function bootstrapFirstAdmin(): Promise<void> {
+async function bootstrapEnvironmentAdmin(attemptedEmail: string): Promise<void> {
   const db = await getDb();
   await ensureAdminSchema(db);
-  if ((await countAdmins(db)) > 0) return;
-
   const [name, email, password] = await Promise.all([
     getEnvironmentValue("ADMIN_NAME"),
     getEnvironmentValue("ADMIN_EMAIL"),
     getEnvironmentValue("ADMIN_PASSWORD"),
   ]);
-  if (!name || !email || password.length < 8) {
+  const normalizedEmail = email.trim().toLowerCase();
+  if (!normalizedEmail || normalizedEmail !== attemptedEmail.trim().toLowerCase()) return;
+  if (!name.trim() || !normalizedEmail || password.length < 8) {
     throw new Error(
-      "Set ADMIN_NAME, ADMIN_EMAIL, and an ADMIN_PASSWORD of at least 8 characters to seed the first administrator.",
+      "Set ADMIN_NAME, ADMIN_EMAIL, and an ADMIN_PASSWORD of at least 8 characters to provision the environment super administrator.",
     );
   }
-  const bcrypt = await import("bcryptjs");
-  await createFirstSuperAdmin(db, {
+  const passwordHash = (await needsEnvironmentAdminPasswordSync(db, normalizedEmail))
+    ? await (await import("bcryptjs")).hash(password, 12)
+    : null;
+  await ensureEnvironmentSuperAdmin(db, {
     id: uuid(),
-    name: name.trim(),
-    email: email.trim().toLowerCase(),
-    passwordHash: await bcrypt.hash(password, 12),
+    name: name.trim().slice(0, 120),
+    email: normalizedEmail,
+    passwordHash,
   });
 }
 
@@ -134,7 +136,7 @@ export async function loginWithPassword(input: {
   password: string;
 }): Promise<{ ok: true; session: AdminSession } | { ok: false; error: string }> {
   setAuthResponseHeaders();
-  await bootstrapFirstAdmin();
+  await bootstrapEnvironmentAdmin(input.email);
   const db = await getDb();
   await pruneExpiredSessions(db);
   const email = input.email.trim().toLowerCase();

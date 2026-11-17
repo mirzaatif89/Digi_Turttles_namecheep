@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { loginSchema } from "./auth.schemas";
+import { loginSchema, passwordResetRequestSchema, passwordResetSchema } from "./auth.schemas";
 import { isAdminModule } from "./permissions";
 
 const moduleSchema = z.object({ module: z.string().refine(isAdminModule, "Unknown admin module") });
@@ -16,6 +16,20 @@ export const loginAdmin = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const { loginWithPassword } = await import("./auth.server");
     return loginWithPassword(data);
+  });
+
+export const requestPasswordReset = createServerFn({ method: "POST" })
+  .validator(passwordResetRequestSchema)
+  .handler(async ({ data }) => {
+    const { requestAdminPasswordReset } = await import("./password-reset.server");
+    return requestAdminPasswordReset(data);
+  });
+
+export const resetPasswordWithOtp = createServerFn({ method: "POST" })
+  .validator(passwordResetSchema)
+  .handler(async ({ data }) => {
+    const { resetAdminPassword } = await import("./password-reset.server");
+    return resetAdminPassword(data);
   });
 
 export const logoutAdmin = createServerFn({ method: "POST" }).handler(async () => {

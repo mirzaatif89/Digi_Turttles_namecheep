@@ -17,9 +17,20 @@ export type AdminNavItem = {
 };
 export type AdminNavGroup = { label: string; items: AdminNavItem[] };
 
+const HIDDEN_SIDEBAR_SECTIONS = new Set([
+  "hero",
+  "story",
+  "about",
+  "cta",
+  "footer",
+  "seo",
+  "nav_links",
+  "philosophy",
+]);
+
 const sectionItems = (group: "Website" | "Content"): AdminNavItem[] =>
   [...SINGLETONS, ...COLLECTIONS]
-    .filter((s) => s.group === group)
+    .filter((s) => s.group === group && !HIDDEN_SIDEBAR_SECTIONS.has(s.key))
     .map((s) => ({ label: s.label, icon: s.icon, to: "section" as const, section: s.key }));
 
 export const ADMIN_NAV: AdminNavGroup[] = [
@@ -28,10 +39,7 @@ export const ADMIN_NAV: AdminNavGroup[] = [
   { label: "Content", items: sectionItems("Content") },
   {
     label: "Inbox",
-    items: [
-      { label: "Messages", icon: "Inbox", to: "/admin/messages", badge: "messages" },
-      { label: "Subscribers", icon: "MailCheck", to: "/admin/subscribers" },
-    ],
+    items: [{ label: "Messages", icon: "Inbox", to: "/admin/messages", badge: "messages" }],
   },
   { label: "Media", items: [{ label: "Media Library", icon: "Image", to: "/admin/media" }] },
   {

@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Inbox, Layers, MailCheck, MailOpen } from "lucide-react";
+import { Inbox, Layers, MailCheck, MailOpen } from "lucide-react";
 import { adminIcon } from "@/components/admin/icons";
 import { getCmsDashboard } from "@/lib/cms/admin.functions";
 import { canViewSection } from "@/lib/cms/access";
@@ -54,13 +54,6 @@ export function Dashboard() {
           on the website as soon as you press save.
         </p>
         <div className="mt-5 flex flex-wrap gap-2">
-          <Link
-            to="/admin/$module"
-            params={{ module: "hero" }}
-            className="admin-primary-button gap-2"
-          >
-            Edit home banner <ArrowRight className="h-4 w-4" />
-          </Link>
           <a href="/" target="_blank" rel="noreferrer" className="admin-secondary-button">
             View website
           </a>
@@ -89,7 +82,10 @@ export function Dashboard() {
           <h3 className="font-display text-lg font-bold">Website sections</h3>
           <div className="mt-4 grid gap-2 sm:grid-cols-2">
             {[...SINGLETONS, ...COLLECTIONS]
-              .filter((section) => canViewSection(session.permissions, section.key))
+              .filter(
+                (section) =>
+                  section.key !== "hero" && canViewSection(session.permissions, section.key),
+              )
               .map((s) => {
                 const Icon = adminIcon(s.icon);
                 const count = data?.perCollection[s.key];

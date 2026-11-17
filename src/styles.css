@@ -942,3 +942,75 @@ html[data-admin-theme="light"] .admin-mobile-sheet {
   border-color: var(--destructive);
   background: color-mix(in oklab, var(--destructive) 16%, transparent);
 }
+.admin-row-actions-trigger {
+  display: inline-grid;
+  width: 2.25rem;
+  height: 2.25rem;
+  place-items: center;
+  border: 1px solid var(--admin-border);
+  border-radius: 0.7rem;
+  background: var(--admin-surface-raised);
+  color: var(--admin-muted);
+  transition:
+    border-color 160ms ease,
+    background-color 160ms ease,
+    color 160ms ease;
+}
+.admin-row-actions-trigger svg {
+  width: 1.1rem;
+  height: 1.1rem;
+}
+.admin-row-actions-trigger:hover,
+.admin-row-actions-trigger[data-state="open"] {
+  border-color: color-mix(in oklab, var(--admin-teal) 55%, var(--admin-border));
+  background: color-mix(in oklab, var(--admin-teal) 14%, var(--admin-surface-raised));
+  color: var(--admin-text);
+}
+.admin-row-actions-trigger:focus-visible {
+  outline: 2px solid var(--admin-teal);
+  outline-offset: 2px;
+}
+.admin-row-actions-menu {
+  min-width: 11rem;
+  padding: 0.35rem;
+  border: 1px solid var(--admin-border);
+  border-radius: 0.8rem;
+  background: var(--admin-surface-raised);
+  color: var(--admin-text);
+  box-shadow: 0 16px 36px -18px oklch(0.04 0.025 230 / 0.8);
+}
+.admin-row-actions-menu-item {
+  display: flex;
+  min-height: 2.35rem;
+  align-items: center;
+  gap: 0.65rem;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.65rem;
+  color: var(--admin-text);
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+.admin-row-actions-menu-item svg {
+  width: 1rem;
+  height: 1rem;
+  color: var(--admin-muted);
+}
+.admin-row-actions-menu-item[data-highlighted] {
+  background: color-mix(in oklab, var(--admin-teal) 14%, transparent);
+  color: var(--admin-text);
+}
+.admin-row-actions-menu-item-danger {
+  color: var(--destructive);
+}
+.admin-row-actions-menu-item-danger svg {
+  color: var(--destructive);
+}
+.admin-row-actions-menu-item-danger[data-highlighted] {
+  background: color-mix(in oklab, var(--destructive) 14%, transparent);
+  color: var(--destructive);
+}
+.admin-row-actions-separator {
+  height: 1px;
+  margin: 0.35rem 0.45rem;
+  background: var(--admin-border);
+}

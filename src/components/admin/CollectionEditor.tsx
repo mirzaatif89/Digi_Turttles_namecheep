@@ -8,6 +8,7 @@ import {
   Heading,
   List,
   Loader2,
+  MoreHorizontal,
   Pencil,
   Plus,
   Search,
@@ -25,6 +26,13 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   Sheet,
   SheetContent,
@@ -296,29 +304,51 @@ export function CollectionEditor({ def }: { def: CollectionDef }) {
                       </span>
                     </div>
                     <div className="flex w-full shrink-0 flex-wrap items-center justify-end gap-1.5 xl:w-auto">
-                      <button className="admin-row-button" onClick={() => openEdit(item)}>
-                        <Pencil /> Edit
-                      </button>
-                      <button
-                        className="admin-row-button"
-                        onClick={() => toggle.mutate(item)}
-                        disabled={toggle.isPending}
-                      >
-                        {item.published ? <EyeOff /> : <Eye />} {item.published ? "Hide" : "Show"}
-                      </button>
-                      <button
-                        className="admin-row-button"
-                        onClick={() => duplicate.mutate(item)}
-                        disabled={duplicate.isPending}
-                      >
-                        <Copy /> Duplicate
-                      </button>
-                      <button
-                        className="admin-row-button admin-row-button-danger"
-                        onClick={() => setDeleting(item)}
-                      >
-                        <Trash2 /> Delete
-                      </button>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <button
+                            type="button"
+                            className="admin-row-actions-trigger"
+                            aria-label={`Actions for ${item.data[def.titleField] || label}`}
+                          >
+                            <MoreHorizontal aria-hidden="true" />
+                          </button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent
+                          align="end"
+                          sideOffset={6}
+                          className="admin-theme admin-row-actions-menu"
+                        >
+                          <DropdownMenuItem
+                            className="admin-row-actions-menu-item"
+                            onSelect={() => openEdit(item)}
+                          >
+                            <Pencil /> Edit
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            className="admin-row-actions-menu-item"
+                            onSelect={() => toggle.mutate(item)}
+                            disabled={toggle.isPending}
+                          >
+                            {item.published ? <EyeOff /> : <Eye />}
+                            {item.published ? "Hide" : "Show"}
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            className="admin-row-actions-menu-item"
+                            onSelect={() => duplicate.mutate(item)}
+                            disabled={duplicate.isPending}
+                          >
+                            <Copy /> Duplicate
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator className="admin-row-actions-separator" />
+                          <DropdownMenuItem
+                            className="admin-row-actions-menu-item admin-row-actions-menu-item-danger"
+                            onSelect={() => setDeleting(item)}
+                          >
+                            <Trash2 /> Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                     </div>
                   </li>
                 );

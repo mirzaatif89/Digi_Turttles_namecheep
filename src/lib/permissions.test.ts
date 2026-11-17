@@ -20,6 +20,13 @@ describe("effectivePermissions", () => {
   it("does not grant an author unrelated default access", () => {
     expect(hasPermission(effectivePermissions("author"), "services", "view")).toBe(false);
   });
+
+  it("gives a newly-created admin complete system access", () => {
+    const permissions = effectivePermissions("admin");
+    for (const actions of Object.values(permissions)) {
+      expect(Object.values(actions).every(Boolean)).toBe(true);
+    }
+  });
 });
 
 describe("super-admin protection", () => {

@@ -136,6 +136,12 @@ function LoginPage() {
           </button>
         </form>
         <Link
+          to="/forgot-password"
+          className="mt-4 block text-center text-sm font-semibold text-primary-glow hover:text-primary"
+        >
+          Forgot your password?
+        </Link>
+        <Link
           to="/"
           className="mt-6 block text-center text-sm font-semibold text-primary-glow hover:text-primary"
         >

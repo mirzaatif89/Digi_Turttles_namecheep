@@ -1,4 +1,4 @@
-import type { Pool } from "mysql2/promise";
+import type { Pool, RowDataPacket } from "mysql2/promise";
 import { ADMIN_MODULES, ADMIN_ROLES, PERMISSION_ACTIONS, ROLE_DEFAULTS } from "../permissions";
 
 let schemaPromise: Promise<void> | undefined;
@@ -21,6 +21,15 @@ async function createSchema(db: Pool): Promise<void> {
     last_login_at DATETIME NULL,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`);
+  await db.query(`CREATE TABLE IF NOT EXISTS admin_bootstrap_state (
+    state_key VARCHAR(64) NOT NULL PRIMARY KEY,
+    state_value VARCHAR(254) NOT NULL,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`);
+  await ensureTableColumns(db, "admin_bootstrap_state", {
+    state_value: "VARCHAR(254) NOT NULL",
+    updated_at: "DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP",
+  });
   await db.query(`CREATE TABLE IF NOT EXISTS admin_sessions (
     id CHAR(36) NOT NULL PRIMARY KEY,
     admin_id CHAR(36) NOT NULL,
@@ -40,6 +49,28 @@ async function createSchema(db: Pool): Promise<void> {
     CONSTRAINT fk_admin_login_events_user FOREIGN KEY (admin_id) REFERENCES admin_users(id) ON DELETE SET NULL,
     INDEX idx_admin_login_rate (email, ip_address, created_at)
   ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`);
+  await db.query(`CREATE TABLE IF NOT EXISTS admin_password_resets (
+    id CHAR(36) NOT NULL PRIMARY KEY,
+    admin_id CHAR(36) NOT NULL,
+    email VARCHAR(254) NOT NULL,
+    otp_hash CHAR(64) NOT NULL,
+    attempt_count TINYINT UNSIGNED NOT NULL DEFAULT 0,
+    requested_ip VARCHAR(45) NULL,
+    expires_at DATETIME NOT NULL,
+    created_at DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+    CONSTRAINT fk_admin_password_resets_user FOREIGN KEY (admin_id) REFERENCES admin_users(id) ON DELETE CASCADE,
+    INDEX idx_admin_password_resets_email (email, created_at),
+    INDEX idx_admin_password_resets_expiry (expires_at)
+  ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`);
+  await ensureTableColumns(db, "admin_password_resets", {
+    admin_id: "CHAR(36) NOT NULL",
+    email: "VARCHAR(254) NOT NULL",
+    otp_hash: "CHAR(64) NOT NULL",
+    attempt_count: "TINYINT UNSIGNED NOT NULL DEFAULT 0",
+    requested_ip: "VARCHAR(45) NULL",
+    expires_at: "DATETIME NOT NULL",
+    created_at: "DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3)",
+  });
   await db.query(`CREATE TABLE IF NOT EXISTS role_permissions (
     role VARCHAR(32) NOT NULL,
     module VARCHAR(64) NOT NULL,
@@ -83,3 +114,20 @@ async function createSchema(db: Pool): Promise<void> {
 }
 
 export const DEFAULT_PERMISSION_COLUMNS = PERMISSION_ACTIONS;
+
+/** Existing installations can predate this table; add only known missing columns. */
+async function ensureTableColumns(
+  db: Pool,
+  table: string,
+  columns: Record<string, string>,
+): Promise<void> {
+  const [rows] = await db.query<RowDataPacket[]>(
+    "SELECT COLUMN_NAME AS column_name FROM information_schema.COLUMNS WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ?",
+    [table],
+  );
+  const existing = new Set(rows.map((row) => String(row["column_name"])));
+  for (const [name, definition] of Object.entries(columns)) {
+    if (!existing.has(name))
+      await db.query(`ALTER TABLE \`${table}\` ADD COLUMN \`${name}\` ${definition}`);
+  }
+}

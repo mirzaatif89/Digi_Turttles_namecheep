@@ -52,6 +52,34 @@ For either layout, add these environment variables in cPanel (never commit their
 `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `ADMIN_NAME`,
 `ADMIN_EMAIL`, `ADMIN_PASSWORD`, and `NODE_ENV=production`.
 
+To enable the admin **Forgot password** email code, also set `SMTP_HOST`,
+`SMTP_PORT` (`465` or `587`), `SMTP_SECURE` (`true` only for implicit TLS/465),
+`SMTP_USER`, `SMTP_PASSWORD`, `SMTP_FROM`, and a random `PASSWORD_RESET_SECRET`
+of at least 32 characters. Keep all of these values in cPanel environment
+variables only, never in Git or browser code.
+
+Admin accounts, CMS entries/settings, contact messages, subscribers, media
+metadata, and uploaded image bytes are stored in MySQL. Existing Sitekeeper
+`content.json` and media files are imported into MySQL the first time the new
+version starts; the old files are left untouched as a backup. If the existing
+files are outside the app's default `.data/sitekeeper` folder, set
+`SITEKEEPER_DATA_DIR` in cPanel to their current absolute directory for the first
+startup, for example `/home/CPANEL_USER/sitekeeper-data` (replace `CPANEL_USER`
+with the account's cPanel username). Back up the MySQL database before deploying
+the storage upgrade.
+
+On the first login after this update, the account matching `ADMIN_EMAIL` is
+promoted to active `super_admin` and its password is synchronized from
+`ADMIN_PASSWORD`. This is a one-time sync per configured email; later password
+changes made through the app are not reset on each login.
+
+The browser's admin query cache is memory-only and is cleared on reload; it is not
+the source of truth. Public uploaded images use a one-hour HTTP cache. Do not
+persist admin users, contact messages, subscriber addresses, or other private
+admin data in browser storage; it can remain accessible on a shared device and
+browser storage may be cleared or evicted. UI preferences such as theme/sidebar
+state are stored locally.
+
 The database must be reachable from the hosting account. If the cPanel plan
 doesn't offer Node.js applications, this SSR app needs a Node.js host or VPS;
 static FTP hosting alone is not sufficient.
