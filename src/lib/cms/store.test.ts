@@ -1,17 +1,15 @@
 import { mkdtemp, readFile, rm, writeFile } from "node:fs/promises";
-import { resolve, join } from "node:path";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
-import { mkdir } from "node:fs/promises";
 import { defaultStore, readStore, updateStore } from "./store.server";
 
 let directory: string;
-const testRoot = resolve("tmp", "cms-tests");
 beforeEach(async () => {
-  await mkdir(testRoot, { recursive: true });
-  directory = await mkdtemp(join(testRoot, "store-"));
+  directory = await mkdtemp(join(tmpdir(), "digiturtle-cms-"));
 });
 afterEach(async () => {
-  if (!directory.startsWith(testRoot + "/") && !directory.startsWith(testRoot + "\\"))
+  if (!directory.startsWith(join(tmpdir(), "digiturtle-cms-")))
     throw new Error("Invalid test directory");
   await rm(directory, { recursive: true, force: true });
 });
