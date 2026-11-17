@@ -1,6 +1,6 @@
 import type { Pool } from "mysql2/promise";
 import { describe, expect, it, vi } from "vitest";
-import { ensureEnvironmentSuperAdmin } from "./admins.server";
+import { ensureEnvironmentSuperAdmin, needsEnvironmentAdminCredentialSync } from "./admins.server";
 
 type QueryCall = { sql: string; params: unknown[] };
 
@@ -13,7 +13,15 @@ function fakeDatabase(stateValue: string, adminId: string | null) {
     release: vi.fn(),
     query: vi.fn(async (sql: string, params: unknown[] = []) => {
       calls.push({ sql, params });
-      if (sql.includes("SELECT state_value")) return [[{ state_value: stateValue }], []] as const;
+      if (sql.includes("SELECT state_key, state_value")) {
+        return [
+          [
+            { state_key: "environment_super_admin_email", state_value: stateValue },
+            { state_key: "environment_super_admin_password", state_value: "stored-hash" },
+          ],
+          [],
+        ] as const;
+      }
       if (sql.includes("SELECT id FROM admin_users"))
         return [adminId ? [{ id: adminId }] : [], []] as const;
       return [{ affectedRows: 1 }, []] as const;
@@ -32,6 +40,7 @@ describe("environment super-admin bootstrap", () => {
       name: "Site Admin",
       email: "admin@example.test",
       passwordHash: "environment-password-hash",
+      credentialsChanged: true,
     });
 
     expect(
@@ -43,6 +52,7 @@ describe("environment super-admin bootstrap", () => {
       ),
     ).toBe(true);
     expect(calls.some(({ sql }) => sql.includes("DELETE FROM admin_sessions"))).toBe(true);
+    expect(calls.some(({ sql }) => sql.includes("DELETE FROM admin_login_events"))).toBe(true);
     expect(connection.commit).toHaveBeenCalledOnce();
   });
 
@@ -54,6 +64,7 @@ describe("environment super-admin bootstrap", () => {
       name: "Site Admin",
       email: "admin@example.test",
       passwordHash: null,
+      credentialsChanged: false,
     });
 
     expect(
@@ -61,5 +72,31 @@ describe("environment super-admin bootstrap", () => {
     ).toBe(false);
     expect(calls.some(({ sql }) => sql.includes("DELETE FROM admin_sessions"))).toBe(false);
     expect(connection.commit).toHaveBeenCalledOnce();
+  });
+
+  it("detects a cPanel environment password change", async () => {
+    const bcrypt = await import("bcryptjs");
+    const storedHash = await bcrypt.hash("current-environment-password", 4);
+    const query = vi.fn(async (sql: string) => {
+      if (sql.includes("SELECT state_key, state_value")) {
+        return [
+          [
+            { state_key: "environment_super_admin_email", state_value: "admin@example.test" },
+            { state_key: "environment_super_admin_password", state_value: storedHash },
+          ],
+          [],
+        ] as const;
+      }
+      if (sql.includes("SELECT * FROM admin_users")) return [[{ id: "admin-id" }], []] as const;
+      throw new Error(`Unexpected query: ${sql}`);
+    });
+    const db = { query } as unknown as Pool;
+
+    await expect(
+      needsEnvironmentAdminCredentialSync(db, "admin@example.test", "new-environment-password"),
+    ).resolves.toBe(true);
+    await expect(
+      needsEnvironmentAdminCredentialSync(db, "admin@example.test", "current-environment-password"),
+    ).resolves.toBe(false);
   });
 });

@@ -29,33 +29,69 @@ export async function findActiveAdminById(db: Pool, id: string): Promise<AdminUs
   return rows[0] ?? null;
 }
 
-const ENV_ADMIN_STATE_KEY = "environment_super_admin_email";
+const ENV_ADMIN_EMAIL_STATE_KEY = "environment_super_admin_email";
+const ENV_ADMIN_PASSWORD_STATE_KEY = "environment_super_admin_password";
 
-export async function needsEnvironmentAdminPasswordSync(db: Pool, email: string): Promise<boolean> {
-  const [states] = await db.query<(RowDataPacket & { state_value: string })[]>(
-    "SELECT state_value FROM admin_bootstrap_state WHERE state_key = ? LIMIT 1",
-    [ENV_ADMIN_STATE_KEY],
+type EnvironmentAdminState = {
+  email: string | null;
+  passwordHash: string | null;
+};
+
+async function environmentAdminState(db: Pool): Promise<EnvironmentAdminState> {
+  const [states] = await db.query<(RowDataPacket & { state_key: string; state_value: string })[]>(
+    "SELECT state_key, state_value FROM admin_bootstrap_state WHERE state_key IN (?, ?)",
+    [ENV_ADMIN_EMAIL_STATE_KEY, ENV_ADMIN_PASSWORD_STATE_KEY],
   );
-  if (states[0]?.state_value !== email) return true;
+  return {
+    email:
+      states.find((state) => state.state_key === ENV_ADMIN_EMAIL_STATE_KEY)?.state_value ?? null,
+    passwordHash:
+      states.find((state) => state.state_key === ENV_ADMIN_PASSWORD_STATE_KEY)?.state_value ?? null,
+  };
+}
+
+export async function needsEnvironmentAdminCredentialSync(
+  db: Pool,
+  email: string,
+  password: string,
+): Promise<boolean> {
+  const state = await environmentAdminState(db);
+  if (state.email !== email || !state.passwordHash) return true;
+  const bcrypt = await import("bcryptjs");
+  if (!(await bcrypt.compare(password, state.passwordHash))) return true;
   return (await findAdminByEmail(db, email)) === null;
 }
 
 export async function ensureEnvironmentSuperAdmin(
   db: Pool,
-  admin: { id: string; name: string; email: string; passwordHash: string | null },
+  admin: {
+    id: string;
+    name: string;
+    email: string;
+    passwordHash: string | null;
+    credentialsChanged: boolean;
+  },
 ): Promise<void> {
   const connection = await db.getConnection();
   try {
     await connection.beginTransaction();
     await connection.query(
-      "INSERT IGNORE INTO admin_bootstrap_state (state_key, state_value) VALUES (?, '')",
-      [ENV_ADMIN_STATE_KEY],
+      "INSERT IGNORE INTO admin_bootstrap_state (state_key, state_value) VALUES (?, ''), (?, '')",
+      [ENV_ADMIN_EMAIL_STATE_KEY, ENV_ADMIN_PASSWORD_STATE_KEY],
     );
-    const [states] = await connection.query<(RowDataPacket & { state_value: string })[]>(
-      "SELECT state_value FROM admin_bootstrap_state WHERE state_key = ? FOR UPDATE",
-      [ENV_ADMIN_STATE_KEY],
+    const [states] = await connection.query<
+      (RowDataPacket & { state_key: string; state_value: string })[]
+    >(
+      "SELECT state_key, state_value FROM admin_bootstrap_state WHERE state_key IN (?, ?) FOR UPDATE",
+      [ENV_ADMIN_EMAIL_STATE_KEY, ENV_ADMIN_PASSWORD_STATE_KEY],
     );
-    const firstSync = states[0]?.state_value !== admin.email;
+    const lockedKeys = new Set(states.map((state) => state.state_key));
+    if (
+      !lockedKeys.has(ENV_ADMIN_EMAIL_STATE_KEY) ||
+      !lockedKeys.has(ENV_ADMIN_PASSWORD_STATE_KEY)
+    ) {
+      throw new Error("Could not lock the environment super-admin state.");
+    }
     const [users] = await connection.query<(RowDataPacket & { id: string })[]>(
       "SELECT id FROM admin_users WHERE email = ? LIMIT 1 FOR UPDATE",
       [admin.email],
@@ -63,7 +99,7 @@ export async function ensureEnvironmentSuperAdmin(
     const current = users[0];
 
     if (current) {
-      if (firstSync) {
+      if (admin.credentialsChanged) {
         if (!admin.passwordHash)
           throw new Error("The .env super-admin password must be synchronized before promotion.");
         await connection.query(
@@ -73,7 +109,7 @@ export async function ensureEnvironmentSuperAdmin(
         await connection.query("DELETE FROM admin_sessions WHERE admin_id = ?", [current.id]);
       } else {
         await connection.query(
-          "UPDATE admin_users SET name = ?, role = 'super_admin', permissions = NULL WHERE id = ?",
+          "UPDATE admin_users SET name = ?, role = 'super_admin', is_active = 1, permissions = NULL WHERE id = ?",
           [admin.name, current.id],
         );
       }
@@ -86,10 +122,22 @@ export async function ensureEnvironmentSuperAdmin(
       );
     }
 
-    await connection.query("UPDATE admin_bootstrap_state SET state_value = ? WHERE state_key = ?", [
-      admin.email,
-      ENV_ADMIN_STATE_KEY,
-    ]);
+    if (admin.credentialsChanged) {
+      await connection.query(
+        "UPDATE admin_bootstrap_state SET state_value = ? WHERE state_key = ?",
+        [admin.email, ENV_ADMIN_EMAIL_STATE_KEY],
+      );
+      await connection.query(
+        "UPDATE admin_bootstrap_state SET state_value = ? WHERE state_key = ?",
+        [admin.passwordHash, ENV_ADMIN_PASSWORD_STATE_KEY],
+      );
+      // An environment credential rotation is an explicit owner recovery action.
+      // Remove old failed attempts so the newly configured password can be used immediately.
+      await connection.query(
+        "DELETE FROM admin_login_events WHERE email = ? AND was_successful = 0",
+        [admin.email],
+      );
+    }
     await connection.commit();
   } catch (error) {
     await connection.rollback();

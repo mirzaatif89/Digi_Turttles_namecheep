@@ -70,8 +70,12 @@ the storage upgrade.
 
 On the first login after this update, the account matching `ADMIN_EMAIL` is
 promoted to active `super_admin` and its password is synchronized from
-`ADMIN_PASSWORD`. This is a one-time sync per configured email; later password
-changes made through the app are not reset on each login.
+`ADMIN_PASSWORD`. The app stores only a bcrypt fingerprint to detect later
+cPanel changes. If either `ADMIN_EMAIL` or `ADMIN_PASSWORD` is changed in the
+cPanel environment and the app is restarted, the next matching login syncs the
+new value and restores that account as active `super_admin`. A password reset
+performed in the app remains in effect until the environment password itself is
+changed.
 
 The browser's admin query cache is memory-only and is cleared on reload; it is not
 the source of truth. Public uploaded images use a one-hour HTTP cache. Do not

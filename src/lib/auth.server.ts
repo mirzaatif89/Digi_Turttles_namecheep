@@ -18,7 +18,7 @@ import {
   ensureEnvironmentSuperAdmin,
   findActiveAdminById,
   findAdminByEmail,
-  needsEnvironmentAdminPasswordSync,
+  needsEnvironmentAdminCredentialSync,
   updateLastLogin,
   type AdminUserRow,
 } from "./repos/admins.server";
@@ -94,7 +94,12 @@ async function bootstrapEnvironmentAdmin(attemptedEmail: string): Promise<void> 
       "Set ADMIN_NAME, ADMIN_EMAIL, and an ADMIN_PASSWORD of at least 8 characters to provision the environment super administrator.",
     );
   }
-  const passwordHash = (await needsEnvironmentAdminPasswordSync(db, normalizedEmail))
+  const credentialsChanged = await needsEnvironmentAdminCredentialSync(
+    db,
+    normalizedEmail,
+    password,
+  );
+  const passwordHash = credentialsChanged
     ? await (await import("bcryptjs")).hash(password, 12)
     : null;
   await ensureEnvironmentSuperAdmin(db, {
@@ -102,6 +107,7 @@ async function bootstrapEnvironmentAdmin(attemptedEmail: string): Promise<void> 
     name: name.trim().slice(0, 120),
     email: normalizedEmail,
     passwordHash,
+    credentialsChanged,
   });
 }
 
