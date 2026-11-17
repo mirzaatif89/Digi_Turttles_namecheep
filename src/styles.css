@@ -872,3 +872,73 @@ html[data-admin-theme="light"] .admin-mobile-sheet {
     transition: none;
   }
 }
+
+/* Sitekeeper content editors */
+.admin-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  border-bottom: 1px solid var(--admin-border);
+}
+.admin-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin-bottom: -1px;
+  border-bottom: 2px solid transparent;
+  padding: 0.6rem 0.8rem;
+  color: var(--admin-muted);
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+.admin-tab:hover {
+  color: var(--admin-text);
+}
+.admin-tab[data-active="true"] {
+  border-bottom-color: var(--admin-teal);
+  color: var(--admin-text);
+}
+.admin-tab-count {
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--admin-teal) 18%, transparent);
+  padding: 0.05rem 0.45rem;
+  font-size: 0.7rem;
+  color: var(--admin-teal);
+}
+
+.admin-row-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 2.1rem;
+  border: 1px solid var(--admin-border);
+  border-radius: 0.6rem;
+  padding: 0 0.65rem;
+  color: var(--admin-text);
+  font-size: 0.78rem;
+  font-weight: 600;
+  transition:
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+.admin-row-button svg {
+  height: 0.9rem;
+  width: 0.9rem;
+}
+.admin-row-button:hover:not(:disabled) {
+  border-color: color-mix(in oklab, var(--admin-teal) 55%, var(--admin-border));
+  background: color-mix(in oklab, var(--admin-teal) 12%, transparent);
+}
+.admin-row-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.admin-row-button-danger {
+  border-color: color-mix(in oklab, var(--destructive) 45%, var(--admin-border));
+  color: color-mix(in oklab, var(--destructive) 75%, var(--admin-text));
+}
+.admin-row-button-danger:hover:not(:disabled) {
+  border-color: var(--destructive);
+  background: color-mix(in oklab, var(--destructive) 16%, transparent);
+}

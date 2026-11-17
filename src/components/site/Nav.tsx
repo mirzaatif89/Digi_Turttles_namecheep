@@ -1,10 +1,14 @@
 import { Link } from "@tanstack/react-router";
 import { LogIn, Menu, X } from "lucide-react";
 import { memo, useEffect, useState } from "react";
-import logo from "@/assets/logo.png";
-import { NAV } from "./content";
+
+import { DEFAULT_LOGO } from "@/lib/cms/schema";
+import { useSite } from "@/lib/cms/site";
 
 export const Nav = memo(function Nav() {
+  const site = useSite();
+  const brand = site.get("brand");
+  const nav = site.list("nav_links");
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [accountState, setAccountState] = useState<"checking" | "guest" | "admin">("checking");
@@ -44,9 +48,9 @@ export const Nav = memo(function Nav() {
       if (fallback !== undefined) window.clearTimeout(fallback);
     };
   }, []);
-  const isAdmin = accountState === "admin";
-  const accountLabel = isAdmin ? "Dashboard" : "Login";
-  const accountHref = isAdmin ? "/admin" : "/login";
+  const signedIn = accountState === "admin";
+  const accountLabel = signedIn ? "Dashboard" : "Login";
+  const accountHref = signedIn ? "/admin" : "/login";
   return (
     <header className="fixed inset-x-0 top-0 z-50 px-4 pt-4">
       <nav
@@ -55,8 +59,8 @@ export const Nav = memo(function Nav() {
         <a href="#home" className="flex items-center gap-2.5">
           <span className="grid h-10 w-10 place-items-center rounded-full bg-foam shadow-[var(--shadow-glow)]">
             <img
-              src={logo}
-              alt="Digi Turtles logo"
+              src={brand["logo"] || DEFAULT_LOGO}
+              alt={`${brand["siteName"]} logo`}
               width={32}
               height={32}
               decoding="async"
@@ -65,29 +69,28 @@ export const Nav = memo(function Nav() {
           </span>
           <span className="leading-tight">
             <span className="block font-display text-base font-bold tracking-wide">
-              DIGI TURTLES
+              {brand["siteName"]}
             </span>
             <span className="block text-[9px] uppercase tracking-[0.3em] text-muted-foreground">
-              Where Ideas Evolve
+              {brand["tagline"]}
             </span>
           </span>
         </a>
         <ul className="hidden shrink-0 items-center gap-1 lg:flex">
-          {NAV.map((n) => (
-            <li key={n.href}>
+          {nav.map((n) => (
+            <li key={n.id}>
               <a
-                href={n.href}
+                href={n["href"]}
                 className="rounded-full px-4 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
               >
-                {n.label}
+                {n["label"]}
               </a>
             </li>
           ))}
           <li>
             <Link
               to={accountHref}
-              aria-busy={accountState === "checking"}
-              className={`ml-1 inline-flex h-9 w-[88px] items-center justify-center gap-1.5 rounded-full bg-[image:var(--gradient-primary)] px-3 text-xs font-bold text-[color:var(--primary-foreground)] shadow-[var(--shadow-glow)] transition-opacity ${accountState === "checking" ? "pointer-events-none opacity-0" : "opacity-100"}`}
+              className="ml-1 inline-flex h-9 min-w-[88px] items-center justify-center gap-1.5 rounded-full bg-[image:var(--gradient-primary)] px-3 text-xs font-bold text-[color:var(--primary-foreground)] shadow-[var(--shadow-glow)]"
             >
               <LogIn className="h-3.5 w-3.5" aria-hidden />
               {accountLabel}
@@ -104,21 +107,20 @@ export const Nav = memo(function Nav() {
       </nav>
       {open && (
         <div className="glass glass-strong mx-auto mt-2 max-w-7xl rounded-3xl p-3 lg:hidden">
-          {NAV.map((n) => (
+          {nav.map((n) => (
             <a
-              key={n.href}
-              href={n.href}
+              key={n.id}
+              href={n["href"]}
               onClick={() => setOpen(false)}
               className="block rounded-2xl px-4 py-3 font-medium hover:bg-accent"
             >
-              {n.label}
+              {n["label"]}
             </a>
           ))}
           <Link
             to={accountHref}
             onClick={() => setOpen(false)}
-            aria-busy={accountState === "checking"}
-            className={`mt-1 flex items-center justify-center gap-2 rounded-2xl bg-[image:var(--gradient-primary)] px-4 py-3 font-semibold text-[color:var(--primary-foreground)] shadow-[var(--shadow-glow)] transition-opacity ${accountState === "checking" ? "pointer-events-none opacity-0" : "opacity-100"}`}
+            className="mt-1 flex items-center justify-center gap-2 rounded-2xl bg-[image:var(--gradient-primary)] px-4 py-3 font-semibold text-[color:var(--primary-foreground)] shadow-[var(--shadow-glow)]"
           >
             <LogIn className="h-4 w-4" aria-hidden />
             {accountLabel}

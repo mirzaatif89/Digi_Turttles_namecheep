@@ -3,6 +3,12 @@ import { AdminShell } from "@/components/admin/AdminShell";
 import { routeAdminSession } from "@/lib/admin.route";
 
 export const Route = createFileRoute("/admin")({
+  head: () => ({
+    meta: [
+      { title: "Sitekeeper Admin — Digi Turtles" },
+      { name: "robots", content: "noindex, nofollow" },
+    ],
+  }),
   beforeLoad: async ({ location }) => {
     const session = await routeAdminSession();
     if (!session)

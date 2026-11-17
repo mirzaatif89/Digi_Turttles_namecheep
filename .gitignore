@@ -40,3 +40,6 @@ dist-ssr
 # Local-only artifacts and secrets
 *.zip
 .env
+
+# Persistent Sitekeeper content and uploads (back up on the server).
+.data/
